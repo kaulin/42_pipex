@@ -13,7 +13,7 @@ Git clone the repository, move into it and run `make` to compile the program.
 ## Usage
 Run the program with:
 
-XXX
+`XXX``
 
 ## Implementation
 A brief description of my approach to the problem, the optimisations I made and possible areas that could be improved.

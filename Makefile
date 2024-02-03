@@ -6,7 +6,7 @@
 #    By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/31 15:00:04 by jajuntti          #+#    #+#              #
-#    Updated: 2024/02/01 08:56:45 by jajuntti         ###   ########.fr        #
+#    Updated: 2024/02/02 13:43:34 by jajuntti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ CFLAGS = -Wall -Wextra -Werror
 SRC_PATH = src/
 OBJ_PATH = obj/
 
-SRC = 
+SRC = 	main.c \
+		pipex.c \
 SRCS = $(addprefix $(SRC_PATH), $(SRC))
 OBJ		= $(SRC:.c=.o)
 OBJS	= $(addprefix $(OBJ_PATH), $(OBJ))
@@ -39,7 +40,7 @@ $(LIB_PATH): $(LIBFT)
 $(LIBFT):
 	make -C $(LIBDIR)
 
-$(OBJ_PATH)%.o: $(SRC_PATH)%.c
+$(OBJ_PATH)%.o: $(SRC_PATH)%.c Makefile
 	$(CC) $(CFLAGS) -c $< $(LIB_PATH) -o $@ -I $(LIBDIR)
 
 clean:
@@ -48,7 +49,7 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
-	make fclean -C $(LIBDIR)
+	rm -f $(LIB_PATH)
 
 re: fclean all
 

@@ -1,30 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   piper_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/31 14:56:21 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/06 14:42:10 by jajuntti         ###   ########.fr       */
+/*   Created: 2024/02/06 14:43:04 by jajuntti          #+#    #+#             */
+/*   Updated: 2024/02/06 14:46:20 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef pipex_H
-# define pipex_H
+#include "pipex.h"
 
-# include "libft.h"
-
-int	check_args(int argc, char *argv[]);
-
-typedef struct s_piper
+void	clean_piper(t_piper *piper)
 {
-	int		input;
-	int		output;
-	int		cmd_i;
-	int		cmd_count;
-	char	*cmds[];
-	char	**paths;
-}	t_piper;
+	
+}
 
-#endif
+t_piper	*init_piper(int argc, char *argv[], char **envp)
+{
+	
+}

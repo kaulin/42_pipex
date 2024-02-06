@@ -6,7 +6,7 @@
 #    By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/31 15:00:04 by jajuntti          #+#    #+#              #
-#    Updated: 2024/02/02 13:43:34 by jajuntti         ###   ########.fr        #
+#    Updated: 2024/02/03 17:09:06 by jajuntti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,38 +14,40 @@ NAME = pipex
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-SRC_PATH = src/
-OBJ_PATH = obj/
+SRC_DIR = src/
+SRC =	main.c \
+		check_args.c
+SRCS = $(addprefix $(SRC_DIR), $(SRC))
 
-SRC = 	main.c \
-		pipex.c \
-SRCS = $(addprefix $(SRC_PATH), $(SRC))
+OBJ_DIR = obj/
 OBJ		= $(SRC:.c=.o)
-OBJS	= $(addprefix $(OBJ_PATH), $(OBJ))
+OBJS	= $(addprefix $(OBJ_DIR), $(OBJ))
 
-LIBFT = libft.a 
-LIBDIR = libft/
-LIB_PATH = $(LIBDIR)$(LIBFT)
+LIB_DIR = libft/
+LIBFT = libft.a
+LIB_PATH = $(LIB_DIR)$(LIBFT)
 
-all: $(OBJ_PATH) $(NAME)
+INC = -I inc/ -I $(LIB_DIR)
 
-$(OBJ_PATH):
-	mkdir $(OBJ_PATH)
+all: $(NAME)
 	
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+$(NAME): $(LIB_PATH) $(OBJ_DIR) $(OBJS) Makefile
+	$(CC) $(CFLAGS) $(OBJS) $(LIB_PATH) -o $(NAME) $(INC)
 
 $(LIB_PATH): $(LIBFT)
 
 $(LIBFT):
-	make -C $(LIBDIR)
+	make -C $(LIB_DIR)
 
-$(OBJ_PATH)%.o: $(SRC_PATH)%.c Makefile
-	$(CC) $(CFLAGS) -c $< $(LIB_PATH) -o $@ -I $(LIBDIR)
+$(OBJ_DIR):
+	mkdir $(OBJ_DIR)
+
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+	$(CC) $(CFLAGS) -c $< -o $@ $(INC)
 
 clean:
-	rm -rf $(OBJ_PATH)
-	make clean -C $(LIBDIR)
+	rm -rf $(OBJ_DIR)
+	make clean -C $(LIB_DIR)
 
 fclean: clean
 	rm -f $(NAME)

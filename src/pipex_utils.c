@@ -1,30 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/31 14:56:21 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/06 14:42:10 by jajuntti         ###   ########.fr       */
+/*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
+/*   Updated: 2024/02/06 14:47:05 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef pipex_H
-# define pipex_H
+#include "pipex.h"
 
-# include "libft.h"
-
-int	check_args(int argc, char *argv[]);
-
-typedef struct s_piper
+char **parse_paths(char **envp)
 {
-	int		input;
-	int		output;
-	int		cmd_i;
-	int		cmd_count;
-	char	*cmds[];
+	int		i;
 	char	**paths;
-}	t_piper;
+	char	*temp;
 
-#endif
+	i = 0;
+	while (ft_strnstr(envp[i], "PATH=", 5) == NULL)
+		i++;
+	paths = ft_split(envp[i] + 5 , ":");
+	if (!paths)
+		return (NULL);
+	i = 0;
+	while(paths[i])
+	{
+		temp = ft_strjoin(paths[i], "/");
+		if (!temp)
+		{
+			while (i > 0)
+				free(paths[--i]);
+			free(paths);
+			return (NULL);
+		}
+		free(paths[i]);
+		paths[i] = temp;
+	}
+	return paths;
+}

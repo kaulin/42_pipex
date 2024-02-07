@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 14:56:21 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/06 14:42:10 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/07 13:26:51 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,21 @@
 
 # include "libft.h"
 
-int	check_args(int argc, char *argv[]);
-
 typedef struct s_piper
 {
-	int		input;
-	int		output;
+	int		*infile;
+	char	*outfile;
+	int		in_fd;
+	int		out_fd;
 	int		cmd_i;
 	int		cmd_count;
-	char	*cmds[];
+	char	**cmds;
 	char	**paths;
 }	t_piper;
+
+void	fail(t_piper *piper);
+void	clean_piper(t_piper *piper);
+int		init_piper(t_piper *piper, int argc, char *argv[], char **envp);
+
 
 #endif

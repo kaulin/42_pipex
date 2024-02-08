@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/08 10:45:41 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/08 12:46:18 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,11 @@ static char **parse_paths(char **envp)
 	char	*temp;
 
 	i = 0;
-	while (ft_strnstr(envp[i], "PATH=", 5) == NULL)
+	while (envp[i] && ft_strnstr(envp[i], "PATH=", 5) == NULL)
 		i++;
-	paths = ft_split(envp[i] + 5 , ":");
+	if (!envp[i])
+		return (NULL);
+	paths = ft_split(&(envp[i][5]) , ":");
 	if (!paths)
 		return (NULL);
 	i = 0;
@@ -88,7 +90,7 @@ void	init_piper(t_piper **piper, int argc, char *argv[], char **envp)
 		fail(piper);
 	(*piper)->cmd_i = 0;
 	(*piper)->cmdc = argc - 3;
-	(*piper)->cmdv = argv + 2;
+	(*piper)->cmdv = &(argv[2]);
 	(*piper)->envp = envp;
 	(*piper)->paths = parse_paths(envp);
 	if (!(*piper)->paths)

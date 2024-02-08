@@ -6,13 +6,13 @@
 #    By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/31 15:00:04 by jajuntti          #+#    #+#              #
-#    Updated: 2024/02/08 10:23:25 by jajuntti         ###   ########.fr        #
+#    Updated: 2024/02/08 12:14:17 by jajuntti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 SRC_DIR = src/
 SRC =	main.c \
@@ -32,7 +32,7 @@ INC = -I inc/ -I $(LIB_DIR)
 
 all: $(NAME)
 	
-$(NAME): $(LIB_PATH) $(OBJ_DIR) $(OBJS) Makefile
+$(NAME): Makefile $(LIB_PATH) $(OBJ_DIR) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIB_PATH) -o $(NAME) $(INC)
 
 $(LIB_PATH): $(LIBFT)
@@ -56,4 +56,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re db
+.PHONY: all clean fclean re debug

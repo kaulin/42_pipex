@@ -6,19 +6,53 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:29:37 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/07 12:42:28 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/08 10:45:53 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-
-static void	do_cmd(char *arg, char **envp)
+static char *find_cmd_path(char *cmd, char **paths)
 {
-	
+	int		i;
+	char	*cmd_path;
+
+	i = 0;
+	while (paths[i])
+	{
+		cmd_path = ft_strjoin(paths[i], cmd);
+		if (!cmd_path)
+			return (NULL);
+		if (access(cmd_path, F_OK) == 0)
+		{
+			return (cmd_path);
+		}
+		free(cmd_path);
+		i++;
+	}
+	return (NULL);
 }
 
-static void	process(t_piper *piper)
+static void	do_cmd(t_piper **piper)
+{
+	char	**cmd;
+	char	*cmd_path;
+	
+	cmd = ft_split((*piper)->cmdv[(*piper)->cmd_i], " ");
+	if (!cmd)
+		fail(piper);
+	cmd_path = find_cmd_path(cmd[0], (*piper)->paths);
+	if (!cmd_path)
+	{
+		clean_array(cmd);
+		free(cmd);
+		fail(piper);
+	}
+	if (execve(cmd_path, cmd, (*piper)->envp) == -1)
+		fail(piper);
+}
+
+static void	process(t_piper **piper)
 {
 	pid_t	pid;
 	int		fd[2];
@@ -31,10 +65,13 @@ static void	process(t_piper *piper)
 	if (pid == 0)
 	{
 		close(fd[0]);
-		if (piper->cmd_i == piper->cmd_count && dup2(piper->output, STDOUT_FILENO) == -1
-		if (dup2(fd[1], STDOUT_FILENO) == -1)
+		if ((*piper)->cmd_i == (*piper)->cmdc \
+			&& dup2((*piper)->out_fd, STDOUT_FILENO) == -1)
 			fail(piper);
-		do_cmd(arg, envp);
+		else if ((*piper)->cmd_i == (*piper)->cmdc \
+			&& dup2(fd[1], STDOUT_FILENO) == -1)
+			fail(piper);
+		do_cmd(piper);
 	}
 	else
 	{
@@ -44,28 +81,18 @@ static void	process(t_piper *piper)
 			fail(piper);
 	}
 }
-
-
+	
 int	pipex(int argc, char *argv[], char **envp)
 {
 	int		i;
-	t_piper	piper;
+	t_piper	*piper;
 
-	i = 1;
-	piper = malloc(sizeof(piper));
-	if (!piper)
-		fail(&piper);
 	init_piper(&piper, argc, argv, envp);
-	input = open(argv[1], O_RDONLY);
-	if (input == -1)
+	i = 1;
+	if (dup2(piper->in_fd, STDIN_FILENO) == -1)
 		fail(&piper);
-	output = open(argv[argc - 1], O_WRONLY | O_CREAT _ 0644)
-	if (output == -1)
-		fail(&piper);
-	dup2(input, SDTDIN_FILENO);
 	while (i < argc - 2)
-		process(&piper)
-	dup2(output, STDOUT_FILENO);
-	do_cmd(argv[i], envp)
+		process(&piper);
+	clean_piper(&piper);
 	return (0);
 }

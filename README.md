@@ -25,3 +25,6 @@ XXX
 
 ## Acknowledgements
 - Peer evaluators: 
+
+## Resources
+Cyrus McConnell, M C. (2017, November 8). Pipes, Forks & Dups: Understanding Command Execution and Input/Output Data Flow. Retrieved from https://www.rozmichelle.com/pipes-forks-dups/

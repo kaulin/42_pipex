@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:29:37 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/08 10:45:53 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/12 13:55:48 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,16 @@ static void	do_cmd(t_piper **piper)
 {
 	char	**cmd;
 	char	*cmd_path;
-	
+	int i;
+
+	i = 0;
 	cmd = ft_split((*piper)->cmdv[(*piper)->cmd_i], " ");
+	dprintf(2, "Cmd array containes:\n");
+	while (cmd[i])
+	{
+		dprintf(2, "Element %d: %s\n", i, cmd[i]);
+		i++;
+	}
 	if (!cmd)
 		fail(piper);
 	cmd_path = find_cmd_path(cmd[0], (*piper)->paths);
@@ -48,8 +56,15 @@ static void	do_cmd(t_piper **piper)
 		free(cmd);
 		fail(piper);
 	}
+	dprintf(2, "Ready to do command: %s @ %s", cmd[0], cmd_path);
 	if (execve(cmd_path, cmd, (*piper)->envp) == -1)
+	{
+		dprintf(2, "Execve failure\n");
+		clean_array(cmd);
+		free(cmd);
+		free(cmd_path);
 		fail(piper);
+	}
 }
 
 static void	process(t_piper **piper)
@@ -65,34 +80,33 @@ static void	process(t_piper **piper)
 	if (pid == 0)
 	{
 		close(fd[0]);
-		if ((*piper)->cmd_i == (*piper)->cmdc \
+		if ((*piper)->cmd_i == (*piper)->cmdc - 1 \
 			&& dup2((*piper)->out_fd, STDOUT_FILENO) == -1)
 			fail(piper);
-		else if ((*piper)->cmd_i == (*piper)->cmdc \
-			&& dup2(fd[1], STDOUT_FILENO) == -1)
+		else if (dup2(fd[1], STDOUT_FILENO) == -1)
 			fail(piper);
+		close(fd[1]);
+		dprintf(2, "Ready to go to command execution\n");
 		do_cmd(piper);
 	}
-	else
-	{
-		wait(NULL);
-		close(fd[1]); 
-		if (dup2(fd[0], STDIN_FILENO) == -1)
-			fail(piper);
-	}
+	close(fd[1]);
+	if (dup2(fd[0], STDIN_FILENO) == -1)
+		fail(piper);
+	close(fd[0]);
 }
 	
 int	pipex(int argc, char *argv[], char **envp)
 {
-	int		i;
 	t_piper	*piper;
 
 	init_piper(&piper, argc, argv, envp);
-	i = 1;
 	if (dup2(piper->in_fd, STDIN_FILENO) == -1)
-		fail(&piper);
-	while (i < argc - 2)
+			fail(&piper);
+	while (piper->cmd_i < piper->cmdc)
+	{
 		process(&piper);
+		piper->cmd_i++;
+	}
 	clean_piper(&piper);
 	return (0);
 }

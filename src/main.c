@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 14:55:20 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/08 12:54:19 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/09 10:42:14 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,6 @@ static void	check_args(int argc, char *argv[])
 
 int	main(int argc, char *argv[], char **envp)
 {
-	int	i;
-	(void) envp;
-	i = 0;
-	while (envp[i])
-	{
-		printf("%s\n", envp[i++]);
-	}
 	check_args(argc, argv);
 	pipex(argc, argv, envp);
 	return (0);

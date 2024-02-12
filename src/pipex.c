@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:29:37 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/12 13:59:40 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/12 14:06:40 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,7 @@ static char *find_cmd_path(char *cmd, char **paths)
 		if (!cmd_path)
 			return (NULL);
 		if (access(cmd_path, F_OK) == 0)
-		{
 			return (cmd_path);
-		}
 		free(cmd_path);
 		i++;
 	}
@@ -72,18 +70,19 @@ static void	process(t_piper **piper)
 	if (pid == 0)
 	{
 		close(fd[0]);
+		if (dup2(fd[1], STDOUT_FILENO) == -1)
+			fail(piper);
+		close(fd[1]);
 		if ((*piper)->cmd_i == (*piper)->cmdc - 1 \
 			&& dup2((*piper)->out_fd, STDOUT_FILENO) == -1)
 			fail(piper);
-		else if (dup2(fd[1], STDOUT_FILENO) == -1)
-			fail(piper);
-		close(fd[1]);
 		do_cmd(piper);
 	}
 	close(fd[1]);
 	if (dup2(fd[0], STDIN_FILENO) == -1)
 		fail(piper);
 	close(fd[0]);
+	waitpid(pid, NULL, 0);
 }
 	
 int	pipex(int argc, char *argv[], char **envp)

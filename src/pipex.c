@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:29:37 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/12 13:55:48 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/12 13:59:40 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,6 @@ static void	do_cmd(t_piper **piper)
 
 	i = 0;
 	cmd = ft_split((*piper)->cmdv[(*piper)->cmd_i], " ");
-	dprintf(2, "Cmd array containes:\n");
-	while (cmd[i])
-	{
-		dprintf(2, "Element %d: %s\n", i, cmd[i]);
-		i++;
-	}
 	if (!cmd)
 		fail(piper);
 	cmd_path = find_cmd_path(cmd[0], (*piper)->paths);
@@ -56,10 +50,8 @@ static void	do_cmd(t_piper **piper)
 		free(cmd);
 		fail(piper);
 	}
-	dprintf(2, "Ready to do command: %s @ %s", cmd[0], cmd_path);
 	if (execve(cmd_path, cmd, (*piper)->envp) == -1)
 	{
-		dprintf(2, "Execve failure\n");
 		clean_array(cmd);
 		free(cmd);
 		free(cmd_path);
@@ -86,7 +78,6 @@ static void	process(t_piper **piper)
 		else if (dup2(fd[1], STDOUT_FILENO) == -1)
 			fail(piper);
 		close(fd[1]);
-		dprintf(2, "Ready to go to command execution\n");
 		do_cmd(piper);
 	}
 	close(fd[1]);

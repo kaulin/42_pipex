@@ -6,7 +6,7 @@
 #    By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/31 15:00:04 by jajuntti          #+#    #+#              #
-#    Updated: 2024/02/11 14:32:16 by jajuntti         ###   ########.fr        #
+#    Updated: 2024/02/12 14:29:25 by jajuntti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,10 +19,16 @@ SRC =	main.c \
 		pipex.c \
 		pipex_utils.c
 SRCS = $(addprefix $(SRC_DIR), $(SRC))
+BSRC =	main_bonus.c \
+		pipex.c \
+		pipex_utils.c
+BSRCS = $(addprefix $(SRC_DIR), $(BSRC))
 
 OBJ_DIR = obj/
 OBJ		= $(SRC:.c=.o)
 OBJS	= $(addprefix $(OBJ_DIR), $(OBJ))
+BOBJ		= $(BSRC:.c=.o)
+BOBJS	= $(addprefix $(OBJ_DIR), $(BOBJ))
 
 LIB_DIR = libft/
 LIBFT = libft.a
@@ -34,6 +40,9 @@ all: $(NAME)
 	
 $(NAME): Makefile $(LIB_PATH) $(OBJ_DIR) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIB_PATH) -o $(NAME) $(INC)
+
+bonus: Makefile $(LIB_PATH) $(OBJ_DIR) $(BOBJS)
+	$(CC) $(CFLAGS) $(BOBJS) $(LIB_PATH) -o $(NAME) $(INC)
 
 $(LIB_PATH): $(LIBFT)
 
@@ -56,4 +65,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re debug
+.PHONY: all bonus clean fclean re

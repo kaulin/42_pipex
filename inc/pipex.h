@@ -6,15 +6,15 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 14:56:21 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/08 10:32:14 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/13 08:19:33 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef pipex_H
-# define pipex_H
+#ifndef PIPEX_H
+# define PIPEX_H
 
-#include <fcntl.h>
-#include <stdio.h>
+# include <fcntl.h>
+# include <stdio.h>
 # include "libft.h"
 
 typedef struct s_piper

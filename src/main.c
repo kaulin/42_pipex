@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 14:55:20 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/12 14:30:13 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/13 08:22:17 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	use_msg(void)
 {
-	ft_putstr_fd("Bad arguments!\nUsage: <input file> <cmd 1> <cmd 2> <output file>\n", 1);
+	ft_putstr_fd("Usage: <input file> <cmd 1> <cmd 2> <output file>\n", 1);
 	exit(EXIT_FAILURE);
 }
 
@@ -24,7 +24,7 @@ static void	check_args(int argc, char *argv[])
 
 	i = 1;
 	if (argc != 5)
-			use_msg();
+		use_msg();
 	while (i < argc)
 	{
 		if (!argv[i] || !*(argv[i]))

@@ -6,13 +6,13 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:29:37 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/12 14:06:40 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/13 09:44:37 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static char *find_cmd_path(char *cmd, char **paths)
+static char	*find_cmd_path(char *cmd, char **paths)
 {
 	int		i;
 	char	*cmd_path;
@@ -35,7 +35,7 @@ static void	do_cmd(t_piper **piper)
 {
 	char	**cmd;
 	char	*cmd_path;
-	int i;
+	int		i;
 
 	i = 0;
 	cmd = ft_split((*piper)->cmdv[(*piper)->cmd_i], " ");
@@ -74,7 +74,8 @@ static void	process(t_piper **piper)
 			fail(piper);
 		close(fd[1]);
 		if ((*piper)->cmd_i == (*piper)->cmdc - 1 \
-			&& dup2((*piper)->out_fd, STDOUT_FILENO) == -1)
+			&& (access((*piper)->outfile, W_OK) != 0) \
+			|| dup2((*piper)->out_fd, STDOUT_FILENO) == -1)
 			fail(piper);
 		do_cmd(piper);
 	}
@@ -82,21 +83,22 @@ static void	process(t_piper **piper)
 	if (dup2(fd[0], STDIN_FILENO) == -1)
 		fail(piper);
 	close(fd[0]);
-	waitpid(pid, NULL, 0);
 }
-	
+
 int	pipex(int argc, char *argv[], char **envp)
 {
 	t_piper	*piper;
 
 	init_piper(&piper, argc, argv, envp);
 	if (dup2(piper->in_fd, STDIN_FILENO) == -1)
-			fail(&piper);
+		fail(&piper);
 	while (piper->cmd_i < piper->cmdc)
 	{
 		process(&piper);
 		piper->cmd_i++;
 	}
+	while (waitpid(-1, NULL, 0) != -1)
+		;
 	clean_piper(&piper);
 	return (0);
 }

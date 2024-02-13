@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/12 14:36:53 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/13 09:07:49 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	fail(t_piper **piper)
 {
 	if (*piper)
 		clean_piper(piper);
-	perror("Unintended consequences");
+	perror("");
 	exit(EXIT_FAILURE);
 }
 
@@ -44,46 +44,48 @@ void	clean_piper(t_piper **piper)
 	free((*piper));
 }
 
-static char **parse_paths(char **envp)
+static void	parse_paths(char ***paths, char **envp)
 {
 	int		i;
-	char	**paths;
 	char	*joined_path;
 
 	i = 0;
 	while (envp[i] && ft_strnstr(envp[i], "PATH=", 5) == NULL)
 		i++;
 	if (!envp[i] || !envp[i][5])
-		return (NULL);
-	paths = ft_split(&(envp[i][5]), ":");
-	if (!paths)
-		return (NULL);
+		return ;
+	*paths = ft_split(&(envp[i][5]), ":");
+	if (!(*paths))
+		return ;
 	i = 0;
-	while(paths[i])
+	while ((*paths)[i])
 	{
-		joined_path = ft_strjoin(paths[i], "/");
+		joined_path = ft_strjoin((*paths)[i], "/");
 		if (!joined_path)
 		{
-			clean_array(paths);
-			free(paths);
-			return (NULL);
+			clean_array(*paths);
+			free(*paths);
+			return ;
 		}
-		free(paths[i]);
-		paths[i++] = joined_path;
+		free((*paths)[i]);
+		(*paths)[i++] = joined_path;
 	}
-	return paths;
 }
 
 void	init_piper(t_piper **ppiper, int argc, char *argv[], char **envp)
 {
-	t_piper *piper;
+	t_piper	*piper;
 
-  	piper = malloc(sizeof(t_piper));
+	piper = malloc(sizeof(t_piper));
 	piper->infile = argv[1];
 	piper->outfile = argv[argc - 1];
 	piper->paths = NULL;
 	piper->in_fd = -1;
 	piper->out_fd = -1;
+	if (access(piper->infile, F_OK) != 0 || access(piper->infile, R_OK) != 0)
+		fail(&piper);
+	if (access(piper->outfile, F_OK) == 0 && access(piper->outfile, W_OK) != 0)
+		fail(&piper);
 	piper->in_fd = open(argv[1], O_RDONLY);
 	if (piper->in_fd == -1)
 		fail(&piper);
@@ -94,7 +96,7 @@ void	init_piper(t_piper **ppiper, int argc, char *argv[], char **envp)
 	piper->cmdc = argc - 3;
 	piper->cmdv = &(argv[2]);
 	piper->envp = envp;
-	piper->paths = parse_paths(envp);
+	parse_paths(&piper->paths, envp);
 	if (!piper->paths)
 		fail(&piper);
 	*ppiper = piper;

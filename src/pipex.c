@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:29:37 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/13 09:44:37 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/16 13:45:08 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,21 @@ static void	process(t_piper **piper)
 	if (pid == 0)
 	{
 		close(fd[0]);
-		if (dup2(fd[1], STDOUT_FILENO) == -1)
-			fail(piper);
+		if ((*piper)->cmd_i < (*piper)->cmdc - 1)
+		{
+			//dprintf(2, "%s is not the last command.\n", (*piper)->cmdv[(*piper)->cmd_i]);
+			if (dup2(fd[1], STDOUT_FILENO) == -1)
+				fail(piper);
+		}
 		close(fd[1]);
-		if ((*piper)->cmd_i == (*piper)->cmdc - 1 \
-			&& (access((*piper)->outfile, W_OK) != 0) \
-			|| dup2((*piper)->out_fd, STDOUT_FILENO) == -1)
-			fail(piper);
+		if ((*piper)->cmd_i == (*piper)->cmdc - 1)
+		{
+			//dprintf(2, "%s is the last command.\n", (*piper)->cmdv[(*piper)->cmd_i]);
+			if (access((*piper)->outfile, W_OK) != 0)
+				fail(piper);
+			if (dup2((*piper)->out_fd, STDOUT_FILENO) == -1)
+				fail(piper);
+		}
 		do_cmd(piper);
 	}
 	close(fd[1]);

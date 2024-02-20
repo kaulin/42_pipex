@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/13 09:07:49 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/20 12:54:10 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	fail(t_piper **piper)
 {
+	perror("");
 	if (*piper)
 		clean_piper(piper);
-	perror("");
-	exit(EXIT_FAILURE);
+	exit (EXIT_FAILURE);
 }
 
 void	clean_array(char **array)
@@ -31,6 +31,8 @@ void	clean_array(char **array)
 		array[i] = NULL;
 		i++;
 	}
+	free(array);
+	array = NULL;
 }
 
 void	clean_piper(t_piper **piper)
@@ -41,6 +43,8 @@ void	clean_piper(t_piper **piper)
 		close((*piper)->out_fd);
 	if ((*piper)->paths)
 		clean_array((*piper)->paths);
+	if ((*piper)->pids)
+		free((*piper)->pids);
 	free((*piper));
 }
 
@@ -50,7 +54,7 @@ static void	parse_paths(char ***paths, char **envp)
 	char	*joined_path;
 
 	i = 0;
-	while (envp[i] && ft_strnstr(envp[i], "PATH=", 5) == NULL)
+	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5))
 		i++;
 	if (!envp[i] || !envp[i][5])
 		return ;
@@ -64,7 +68,6 @@ static void	parse_paths(char ***paths, char **envp)
 		if (!joined_path)
 		{
 			clean_array(*paths);
-			free(*paths);
 			return ;
 		}
 		free((*paths)[i]);
@@ -80,6 +83,7 @@ void	init_piper(t_piper **ppiper, int argc, char *argv[], char **envp)
 	piper->infile = argv[1];
 	piper->outfile = argv[argc - 1];
 	piper->paths = NULL;
+	piper->pids = NULL;
 	piper->in_fd = -1;
 	piper->out_fd = -1;
 	if (access(piper->infile, F_OK) != 0 || access(piper->infile, R_OK) != 0)
@@ -98,6 +102,9 @@ void	init_piper(t_piper **ppiper, int argc, char *argv[], char **envp)
 	piper->envp = envp;
 	parse_paths(&piper->paths, envp);
 	if (!piper->paths)
+		fail(&piper);
+	piper->pids = malloc(sizeof(pid_t) * piper->cmdc);
+	if (!piper->pids)
 		fail(&piper);
 	*ppiper = piper;
 }

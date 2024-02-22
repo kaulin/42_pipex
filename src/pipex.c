@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:29:37 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/21 13:02:56 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/22 12:36:11 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,17 @@ static int	do_cmd(t_piper **piper)
 	int		i;
 
 	i = 0;
+	//TODO: Handle single quotations
 	cmd = ft_split((*piper)->cmdv[(*piper)->cmd_i], " ");
 	if (!cmd)
 		return (1);
-	cmd_path = find_cmd_path(cmd[0], (*piper)->paths);
+	if (ft_strchr(cmd[0], '/'))
+	{
+		cmd_path = ft_strdup(cmd[0]);
+		cmd[0] = ft_strdup(ft_strrchr(cmd[0], '/') + 1);
+	}
+	else
+		cmd_path = find_cmd_path(cmd[0], (*piper)->paths);
 	if (!cmd_path)
 	{
 		clean_array(cmd);

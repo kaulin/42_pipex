@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/20 12:54:10 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/21 11:18:39 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,16 +86,6 @@ void	init_piper(t_piper **ppiper, int argc, char *argv[], char **envp)
 	piper->pids = NULL;
 	piper->in_fd = -1;
 	piper->out_fd = -1;
-	if (access(piper->infile, F_OK) != 0 || access(piper->infile, R_OK) != 0)
-		fail(&piper);
-	if (access(piper->outfile, F_OK) == 0 && access(piper->outfile, W_OK) != 0)
-		fail(&piper);
-	piper->in_fd = open(argv[1], O_RDONLY);
-	if (piper->in_fd == -1)
-		fail(&piper);
-	piper->out_fd = open(argv[argc - 1], O_TRUNC | O_CREAT | O_RDWR, 0644);
-	if (piper->out_fd == -1)
-		fail(&piper);
 	piper->cmd_i = 0;
 	piper->cmdc = argc - 3;
 	piper->cmdv = &(argv[2]);

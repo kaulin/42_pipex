@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:29:37 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/22 12:36:11 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/23 15:49:10 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	do_cmd(t_piper **piper)
 
 	i = 0;
 	//TODO: Handle single quotations
-	cmd = ft_split((*piper)->cmdv[(*piper)->cmd_i], " ");
+	cmd = split_esc((*piper)->cmdv[(*piper)->cmd_i], " ", 39);
 	if (!cmd)
 		return (1);
 	if (ft_strchr(cmd[0], '/'))
@@ -69,13 +69,13 @@ static void child(int *fd, t_piper **piper)
 	{
 		(*piper)->in_fd = open((*piper)->infile, O_RDONLY);
 		if ((*piper)->in_fd == -1 || dup2((*piper)->in_fd, STDIN_FILENO) == -1)
-			fail(piper);
+			fail("", piper);
 		close((*piper)->in_fd);
 	}
 	close(fd[0]);
 	if ((*piper)->cmd_i < (*piper)->cmdc - 1 \
 		&& dup2(fd[1], STDOUT_FILENO) == -1)
-		fail(piper);
+		fail("", piper);
 	close(fd[1]);
 	if ((*piper)->cmd_i == (*piper)->cmdc - 1)
 	{
@@ -83,11 +83,11 @@ static void child(int *fd, t_piper **piper)
 			open((*piper)->outfile, O_TRUNC | O_CREAT | O_RDWR, 0644);
 		if ((*piper)->out_fd == -1 \
 			|| dup2((*piper)->out_fd, STDOUT_FILENO) == -1)
-			fail(piper);
+			fail("", piper);
 		close((*piper)->out_fd);
 	}
 	if (do_cmd(piper))
-		fail(piper);
+		fail((*piper)->cmdv[(*piper)->cmd_i], piper);
 }
 
 static void	parent(t_piper **piper)
@@ -96,16 +96,16 @@ static void	parent(t_piper **piper)
 	int		fd[2];
 
 	if (pipe(fd) == -1)
-		fail(piper);
+		fail("Pipe failed", piper);
 	pid = fork();
 	if (pid == -1)
-		fail(piper);
+		fail("Fork failed", piper);
 	if (pid == 0)
 		child(fd, piper);
 	close(fd[1]);
 	(*piper)->pids[(*piper)->cmd_i] = pid;
 	if (dup2(fd[0], STDIN_FILENO) == -1)
-		fail(piper);
+		fail("", piper);
 	close(fd[0]);
 }
 
@@ -114,6 +114,7 @@ int	pipex(int argc, char *argv[], char **envp)
 	t_piper	*piper;
 	int		i;
 	int		status;
+	int		es;
 
 	i = 0;
 	status = 0;
@@ -125,14 +126,15 @@ int	pipex(int argc, char *argv[], char **envp)
 	}
 	while (i < piper->cmdc)
 	{
+		es = 0;
 		if (waitpid(piper->pids[i], &status, 0) == -1)
-			fail(&piper);
+			fail("Waitpid failed", &piper);
 		if (WIFEXITED(status))
-			status = WEXITSTATUS(status);
-		dprintf(2, "Process %d id was %d and it exited with status %d\n", i, piper->pids[i], status);
+			es = WEXITSTATUS(status);
+		dprintf(2, "Process %d id was %d, it exited with status %d - es %d\n", i, piper->pids[i], status, es);
 		i++;
 	}
 	clean_piper(&piper);
 	dprintf(2, "Final exit code: %d\n", status);
-	exit(status);
+	exit(es);
 }

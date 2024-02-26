@@ -6,15 +6,15 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/22 10:10:12 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/23 14:13:31 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	fail(t_piper **piper)
+void	fail(char *msg, t_piper **piper)
 {
-	perror("");
+	perror(msg);
 	if (*piper)
 		clean_piper(piper);
 	exit (EXIT_FAILURE);
@@ -92,9 +92,9 @@ void	init_piper(t_piper **ppiper, int argc, char *argv[], char **envp)
 	piper->envp = envp;
 	parse_paths(&piper->paths, envp);
 	if (!piper->paths)
-		fail(&piper);
+		fail("No environment paths set", &piper);
 	piper->pids = malloc(sizeof(pid_t) * piper->cmdc);
 	if (!piper->pids)
-		fail(&piper);
+		fail("Memory allocation error", &piper);
 	*ppiper = piper;
 }

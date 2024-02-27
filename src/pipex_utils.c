@@ -6,18 +6,24 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/23 14:13:31 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/27 15:38:53 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	fail(char *msg, t_piper **piper)
+void	fail(int exit_code, char *msg, t_piper **piper)
 {
-	perror(msg);
+	if (exit_code == 127 && ft_strchr(msg, '/') == NULL)
+	{
+		ft_putstr_fd("zsh: command not found: ", 2);
+		ft_putendl_fd(msg, 2);
+	}
+	else
+		perror(msg);
 	if (*piper)
 		clean_piper(piper);
-	exit (EXIT_FAILURE);
+	exit (exit_code);
 }
 
 void	clean_array(char **array)
@@ -92,9 +98,9 @@ void	init_piper(t_piper **ppiper, int argc, char *argv[], char **envp)
 	piper->envp = envp;
 	parse_paths(&piper->paths, envp);
 	if (!piper->paths)
-		fail("No environment paths set", &piper);
+		fail(EXIT_FAILURE, "Missing environment paths", &piper);
 	piper->pids = malloc(sizeof(pid_t) * piper->cmdc);
 	if (!piper->pids)
-		fail("Memory allocation error", &piper);
+		fail(EXIT_FAILURE, "Memory allocation error", &piper);
 	*ppiper = piper;
 }

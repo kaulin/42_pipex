@@ -6,7 +6,7 @@
 #    By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/31 15:00:04 by jajuntti          #+#    #+#              #
-#    Updated: 2024/02/26 16:40:36 by jajuntti         ###   ########.fr        #
+#    Updated: 2024/02/27 15:59:02 by jajuntti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,15 +15,12 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
 
 SRC_DIR = src/
-SRC =	main.c \
-		pipex.c \
+COMMON = pipex.c \
 		pipex_utils.c \
-		split_esc.c
+		split_quote.c
+SRC =	main.c $(COMMON)
 SRCS = $(addprefix $(SRC_DIR), $(SRC))
-BSRC =	main_bonus.c \
-		pipex.c \
-		pipex_utils.c \
-		split_esc.c
+BSRC =	main_bonus.c $(COMMON)
 BSRCS = $(addprefix $(SRC_DIR), $(BSRC))
 
 OBJ_DIR = obj/
@@ -67,7 +64,4 @@ fclean: clean
 
 re: fclean all
 
-split:
-	cc src/test.c src/split_esc.c libft/libft.a -I inc -I libft -g
-
-.PHONY: all bonus clean fclean re split
+.PHONY: all bonus clean fclean re

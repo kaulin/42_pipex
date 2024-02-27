@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   split_esc.c                                        :+:      :+:    :+:   */
+/*   split_quote.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 16:39:19 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/27 09:44:18 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/27 10:25:04 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,13 +88,18 @@ static void	clean(char **array)
 		free(array[i++]);
 }
 
-char	**split_esc(char const *s, char *dstr, char esc)
+char	**split_quote(char const *s, char *dstr)
 {
 	int		count;
+	char	esc;
 	int		esc_flag;
 	char	**array;
 
 	esc_flag = 0;
+	if (ft_strchr(s, 39))
+		esc = 39;
+	else
+		esc = 34;
 	if (ft_strchr(dstr, esc))
 		return (NULL);
 	count = count_words(s, dstr, esc, &esc_flag);

@@ -6,7 +6,7 @@
 #    By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/31 15:00:04 by jajuntti          #+#    #+#              #
-#    Updated: 2024/02/23 15:50:43 by jajuntti         ###   ########.fr        #
+#    Updated: 2024/02/26 16:40:36 by jajuntti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,4 +67,7 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all bonus clean fclean re
+split:
+	cc src/test.c src/split_esc.c libft/libft.a -I inc -I libft -g
+
+.PHONY: all bonus clean fclean re split

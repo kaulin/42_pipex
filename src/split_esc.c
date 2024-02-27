@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 16:39:19 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/26 12:49:23 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/02/27 09:44:18 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,38 +14,32 @@
 
 static int	count_words(char const *s, char *dstr, char esc, int *esc_flag)
 {
-	size_t	count;
-	int		i;
+	int	words;
+	int	i;
 
-	count = 0;
-	i = -1;
-	while (s[++i])
+	words = 0;
+	i = 0;
+	while (s[i])
 	{
 		if (s[i] && ft_strchr(dstr, s[i]) == NULL)
 		{
-			count++;
-			if (s[i] == esc)
-			{
-				*esc_flag = 1 - *esc_flag;
-				i++;
-			}
-			while ((s[i] && ft_strchr(dstr, s[i]) == NULL) \
-				|| (s[i] && esc_flag && ft_strchr(dstr, s[i])))
+			words++;
+			while (s[i] && (*esc_flag || ft_strchr(dstr, s[i]) == NULL))
 			{
 				if (s[i] == esc)
 					*esc_flag = 1 - *esc_flag;
 				i++;
 			}
 		}
+		i++;
 	}
-	printf("Number of words is: %zu\n", count);
-	return (count);
+	return (words);
 }
 
 static int	make_word(char **dest, char const *src, char *dstr, char esc)
 {
-	int		esc_flag;
-	size_t	i;
+	int	esc_flag;
+	int	i;
 
 	esc_flag = 0;
 	i = 0;
@@ -55,8 +49,11 @@ static int	make_word(char **dest, char const *src, char *dstr, char esc)
 			esc_flag = 1 - esc_flag;
 		i++;
 	}
-	*dest = ft_substr(src, 0, i);
-	return ((int)i);
+	if (src[0] == esc && src[i - 1] == esc)
+		*dest = ft_substr(src, 1, i - 2);
+	else
+		*dest = ft_substr(src, 0, i);
+	return (i);
 }
 
 static void	*make_words(char **array, char const *s, char *dstr, char esc)
@@ -78,15 +75,7 @@ static void	*make_words(char **array, char const *s, char *dstr, char esc)
 		else
 			str_i++;
 	}
-	printf("Word_i =  %d\n", word_i);
-	printf("String at 0 is %s\n", array[0]);
-	printf("String at 1 is %s\n", array[1]);
 	array[word_i] = NULL;
-	printf("Word_i =  %d\n", word_i);
-	printf("String at 0 is %s\n", array[0]);
-	printf("String at 1 is %s\n", array[1]);
-	if (array[2] == NULL)
-		printf("Third element is NULL\n");
 	return (array);
 }
 

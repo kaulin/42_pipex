@@ -6,13 +6,13 @@
 #    By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/31 15:00:04 by jajuntti          #+#    #+#              #
-#    Updated: 2024/02/27 15:59:02 by jajuntti         ###   ########.fr        #
+#    Updated: 2024/02/28 09:59:47 by jajuntti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 
 SRC_DIR = src/
 COMMON = pipex.c \
@@ -37,10 +37,10 @@ INC = -I inc/ -I $(LIB_DIR)
 
 all: $(NAME)
 	
-$(NAME): Makefile $(LIB_PATH) $(OBJ_DIR) $(OBJS)
+$(NAME): $(LIB_PATH) $(OBJ_DIR) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIB_PATH) -o $(NAME) $(INC)
 
-bonus: Makefile $(LIB_PATH) $(OBJ_DIR) $(BOBJS)
+bonus: $(LIB_PATH) $(OBJ_DIR) $(BOBJS)
 	$(CC) $(CFLAGS) $(BOBJS) $(LIB_PATH) -o $(NAME) $(INC)
 
 $(LIB_PATH): $(LIBFT)
@@ -51,7 +51,7 @@ $(LIBFT):
 $(OBJ_DIR):
 	mkdir $(OBJ_DIR)
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c Makefile
 	$(CC) $(CFLAGS) -c $< -o $@ $(INC)
 
 clean:

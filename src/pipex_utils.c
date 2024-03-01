@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/27 15:38:53 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/01 13:50:45 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	fail(int exit_code, char *msg, t_piper **piper)
 {
 	if (exit_code == 127 && ft_strchr(msg, '/') == NULL)
 	{
-		ft_putstr_fd("zsh: command not found: ", 2);
+		ft_putstr_fd("command not found: ", 2);
 		ft_putendl_fd(msg, 2);
 	}
 	else

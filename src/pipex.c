@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:29:37 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/27 15:57:13 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/01 14:08:53 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ static void	child(int *fd, t_piper **piper)
 		&& dup2(fd[1], STDOUT_FILENO) == -1)
 		fail(EXIT_FAILURE, "", piper);
 	close(fd[1]);
+	if (ft_strlen((*piper)->cmdv[(*piper)->cmd_i]) == 0)
+		fail(127, (*piper)->cmdv[(*piper)->cmd_i], piper);
 	if ((*piper)->cmd_i == 0)
 	{
 		(*piper)->in_fd = open((*piper)->infile, O_RDONLY);

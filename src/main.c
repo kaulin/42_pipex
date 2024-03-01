@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 14:55:20 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/27 15:47:00 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/01 13:53:44 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,10 @@ static void	use_msg(void)
 /*
 If there the number of arguments is not 5, prints use message and exits.
 */
-static void	check_args(int argc, char *argv[])
+static void	check_args(int argc)
 {
-	int	i;
-
-	i = 1;
 	if (argc != 5)
 		use_msg();
-	while (i < argc)
-	{
-		if (!argv[i] || !*(argv[i]))
-			use_msg();
-		i++;
-	}
 }
 
 /*
@@ -45,7 +36,7 @@ environment variable.
 */
 int	main(int argc, char *argv[], char **envp)
 {
-	check_args(argc, argv);
+	check_args(argc);
 	pipex(argc, argv, envp);
 	return (0);
 }

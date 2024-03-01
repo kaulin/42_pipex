@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 14:55:20 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/02/13 08:22:32 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/01 13:53:31 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,15 @@ static void	use_msg(void)
 	exit(EXIT_FAILURE);
 }
 
-static void	check_args(int argc, char *argv[])
+static void	check_args(int argc)
 {
-	int	i;
-
-	i = 1;
 	if (argc < 5)
 		use_msg();
-	while (i < argc)
-	{
-		if (!argv[i] || !*(argv[i]))
-			use_msg();
-		i++;
-	}
 }
 
 int	main(int argc, char *argv[], char **envp)
 {
-	check_args(argc, argv);
+	check_args(argc);
 	pipex(argc, argv, envp);
 	return (0);
 }

@@ -12,6 +12,7 @@ IN="meow/infile"
 OUT="meow/outfile"
 NOR="meow/noread"
 NOW="meow/nowrite"
+NULL=""
 
 # Declare test counter
 declare -i COUNTER=1
@@ -33,9 +34,9 @@ function init() {
 	echo "Blue\nRed\nGray\nBlue\nTeal\nYellow\nPurple\nOrange\nPink\nBrown\nWhite\nBlack\nCyan\nMagenta\nTurquoise\nLavender\nIndigo\nMaroon\nBeige\nOlive\nCoral\nPeach\nGold\nSilver\nNavy\nViolet\nRuby\nEmerald\nSapphire\nAmber\nCharcoal\nIvory\nMauve\nFuchsia\nMint\nSlate\nTangerine\nPeriwinkle\nAsh\nLilac\nNavy Blue\nRed\nGray\nGreen\nTeal\nYellow\nPurple\nOrange\nPink\nBrown\nWhite\nBlack\nCyan\nMagenta\nTurquoise\nLavender\nIndigo\nMaroon\nBeige\nOlive\nCoral\nPeach\nGold\nSilver\nNavy\nViolet\nRuby\nEmerald\nSapphire\nAmber\nCharcoal\nIvory\nMauve\nFuchsia\nMint\nSlate\nTangerine\nPeriwinkle\nAsh\nLilac\nNavy Blue\nRed\nGray\nGreen\nTeal\nYellow\nPurple\nOrange\nPink\nBrown\nWhite\nBlack\nCyan\nMagenta\nTurquoise\nLavender\nIndigo\nMaroon\nBeige\nOlive\nCoral\nPeach\nGold\nSilver\nNavy\nViolet\nRuby\nEmerald\nSapphire\nAmber\nCharcoal\nIvory\nMauve\nFuchsia\nMint\nSlate\nTangerine\nPeriwinkle\nBurgundy\nLilac\nNavy Blue\nRed\nGray\nGreen\nTeal\nYellow" > meow/noread
 	sed 's/\\n/\'$'\n''/g' meow/noread | cat > meow/infile
 	chmod 111 meow/noread
-	echo "This is not meant to be written in" > meow/nowrite_p
-	cp meow/nowrite_p meow/nowrite_s
-	chmod 111 meow/nowrite_p meow/nowrite_s
+	echo "This is not meant to be written in" > meow/nowrite_pipex
+	cp meow/nowrite_pipex meow/nowrite_shell
+	chmod 111 meow/nowrite_pipex meow/nowrite_shell
 	echo "This is meant to be overwritten" > meow/outfile1_pipex
 	echo "This is meant to be overwritten" > meow/outfile1_shell
 	echo -e "${CYAN}Done!${NC}"
@@ -69,6 +70,18 @@ function norm() {
 	done
 }
 
+# Test arguments function
+function test_args() {
+	echo ""
+	echo -e "${NCB}Test 0: ${NC}Number of arguments"
+	echo -e "Error for too few arguments:"
+	eval ./pipex meow/infile 'sort' meow/outfile
+	echo ""
+	echo -e "Error for too many arguments:"
+	eval ./pipex meow/infile 'sort' 'uniq' 'wc -l' meow/outfile
+	proceed
+}
+
 # Proceed function
 function proceed() {
 	while true; do
@@ -86,11 +99,11 @@ function proceed() {
 
 # Test function
 function test() {
-	local desc="$1"
-	local inf="$2"
-	local c1="$3"
-	local c2="$4"
-	local outf="$5"
+	local desc=$1
+	local inf=$2
+	local c1=$3
+	local c2=$4
+	local outf=$5
 	local p_outf=""
 	local s_outf=""
 	local p_cmd=""
@@ -100,12 +113,9 @@ function test() {
 	if [ "$outf" = "${OUT}" ]
 	then
 		outf+="${COUNTER}"
-		p_outf="${outf}_pipex"
-		s_outf="${outf}_shell"
-	else
-		p_outf="${outf}_pipex"
-		s_outf="${outf}_shell"
 	fi
+	p_outf="${outf}_pipex"
+	s_outf="${outf}_shell"
 	p_cmd="${PIP} $inf '$c1' '$c2' $p_outf"
 	s_cmd="< $inf $c1 | $c2 > $s_outf"
 
@@ -186,16 +196,21 @@ fi
 welcome
 init
 norm
+test_args
 
 # INSERT TESTS BELOW (FORMAT: "DESCRIPTION" "INFILE" "CMD1" "CMD2" "OUTFILE")
 test "Simple test, existing outfile should be overwritten"  "${IN}" "sort" "uniq" "${OUT}"
+# Infile & Outfile tests
 test "Infile does not exist" "bad_cat" "sort" "ls" "${OUT}"
+test "Infile is empty string" $NULL "sort" "ls" "${OUT}"
 test "No read permission for infile" "${NOR}" "sort" "ls" "${OUT}"
-test "No write permission for infile" "${NOR}" "sort" "ls" "${OUT}"
-test "First command is empty string" "${IN}" "''" "ls" "${OUT}"
-test "Second command is empty string" "${IN}" "ls" "''" "${OUT}"
-test "First command does not exist" "${IN}" "scratch_the_cat" "ls" "${OUT}"
-test "Second command does not exist" "${IN}" "ls" "scratch_the_cat" "${OUT}"
+test "No write permission for outfile" "${IN}" "sort" "ls" "${NOW}"
+# Command tests
+test "First command is empty string" "${IN}" $NULL "ls" "${OUT}"
+test "Second command is empty string" "${IN}" "ls" $NULL "${OUT}"
+test "First command does not exist" "${IN}" "bad_cat" "ls" "${OUT}"
+test "Second command does not exist" "${IN}" "ls" "bad_cat" "${OUT}"
+test "Command handles quotes" "${IN}" "grep \" Blue\"" "wc -l" "${OUT}"
 
 # INSERT TESTS ABOVE
 

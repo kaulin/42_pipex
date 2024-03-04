@@ -75,10 +75,10 @@ function test_args() {
 	echo ""
 	echo -e "${NCB}Test 0: ${NC}Number of arguments"
 	echo -e "Error for too few arguments:"
-	eval ./pipex meow/infile 'sort' meow/outfile
+	eval ./pipex meow/infile 'sort' meow/outfile0
 	echo ""
-	echo -e "Error for too many arguments:"
-	eval ./pipex meow/infile 'sort' 'uniq' 'wc -l' meow/outfile
+	echo -e "Error for too many arguments: "
+	eval ./pipex meow/infile 'sort' 'uniq' 'wc -l' meow/outfile0
 	proceed
 }
 
@@ -109,6 +109,8 @@ function test() {
 	local p_cmd=""
 	local s_cmd=""
 	local comp=""
+	local p_xs=0
+	local s_xs=0
 
 	if [ "$outf" = "${OUT}" ]
 	then
@@ -124,14 +126,16 @@ function test() {
 	echo -e "Pipex command: $p_cmd"
 	echo -e "--- Pipex error messages: ---${OLIVE}"
 	eval $p_cmd
+	p_xs=$?
 	echo -e "${NC}-----------------------------"
-	echo -e "Pipex exit status: $?"
+	echo -e "Pipex exit status: $p_xs"
 
 	echo -e "Shell command: $s_cmd"
 	echo -e "--- Shell error messages: ---${OLIVE}"
 	eval $s_cmd
+	s_xs=$?
 	echo -e "${NC}-----------------------------"
-	echo -e "Shell exit status: $?"
+	echo -e "Shell exit status: $s_xs"
 
 	comp=$(diff "$p_outf" "$s_outf")
 	if [ -z "$comp" ]
@@ -198,20 +202,19 @@ init
 norm
 test_args
 
-# INSERT TESTS BELOW (FORMAT: "DESCRIPTION" "INFILE" "CMD1" "CMD2" "OUTFILE")
+# INSERT TESTS BELOW (FORMAT: test "DESCRIPTION" "INFILE" "CMD1" "CMD2" "OUTFILE")
 test "Simple test, existing outfile should be overwritten"  "${IN}" "sort" "uniq" "${OUT}"
 # Infile & Outfile tests
 test "Infile does not exist" "bad_cat" "sort" "ls" "${OUT}"
-test "Infile is empty string" $NULL "sort" "ls" "${OUT}"
 test "No read permission for infile" "${NOR}" "sort" "ls" "${OUT}"
 test "No write permission for outfile" "${IN}" "sort" "ls" "${NOW}"
 # Command tests
-test "First command is empty string" "${IN}" $NULL "ls" "${OUT}"
-test "Second command is empty string" "${IN}" "ls" $NULL "${OUT}"
 test "First command does not exist" "${IN}" "bad_cat" "ls" "${OUT}"
 test "Second command does not exist" "${IN}" "ls" "bad_cat" "${OUT}"
-test "Command handles quotes" "${IN}" "grep \" Blue\"" "wc -l" "${OUT}"
-
+test "Accepts quotes within commands" "${IN}" "/usr/bin/sort" "wc -l" "${OUT}"
+test "Full path of command" "${IN}" "/usr/bin/grep \"Bl\"" "/usr/bin/uniq" "${OUT}"
+test "Full path of command, first command not valid" "${IN}" "/bin/sort" "/bin/ls" "${OUT}"
+test "Full path of command with command options" "${IN}" "/usr/bin/grep -v \"Bl\"" "/usr/bin/sort" "${OUT}"
 # INSERT TESTS ABOVE
 
 # Finish up

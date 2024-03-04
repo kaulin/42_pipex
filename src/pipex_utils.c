@@ -6,12 +6,15 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/01 13:50:45 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/04 12:42:25 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+/*
+Handles command failures, lacking permissions, etc by printing appropriate error message, cleanin the piper struct and returning with correct exit code.
+*/
 void	fail(int exit_code, char *msg, t_piper **piper)
 {
 	if (exit_code == 127 && ft_strchr(msg, '/') == NULL)
@@ -26,6 +29,9 @@ void	fail(int exit_code, char *msg, t_piper **piper)
 	exit (exit_code);
 }
 
+/*
+Free's the elements of an array of strings and then the array pointer itself.
+*/
 void	clean_array(char **array)
 {
 	int	i;
@@ -41,6 +47,9 @@ void	clean_array(char **array)
 	array = NULL;
 }
 
+/*
+Cleans the piper struct by closing any open fds and freeing allocated memory.
+*/
 void	clean_piper(t_piper **piper)
 {
 	if ((*piper)->in_fd != -1)
@@ -54,12 +63,17 @@ void	clean_piper(t_piper **piper)
 	free((*piper));
 }
 
+/*
+Parses paths from environment variable.
+*/
 static void	parse_paths(char ***paths, char **envp)
 {
 	int		i;
 	char	*joined_path;
 
 	i = 0;
+	if (!*envp)
+		return;
 	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5))
 		i++;
 	if (!envp[i] || !envp[i][5])
@@ -81,6 +95,9 @@ static void	parse_paths(char ***paths, char **envp)
 	}
 }
 
+/*
+Initialises piper struct.
+*/
 void	init_piper(t_piper **ppiper, int argc, char *argv[], char **envp)
 {
 	t_piper	*piper;

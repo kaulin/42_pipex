@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 14:55:20 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/01 13:53:44 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/04 12:22:57 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	use_msg(void)
 }
 
 /*
-If there the number of arguments is not 5, prints use message and exits.
+If the the number of arguments is not 5, prints use message and exits.
 */
 static void	check_args(int argc)
 {

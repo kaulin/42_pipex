@@ -6,12 +6,15 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:29:37 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/01 14:08:53 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/04 12:36:34 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+/*
+Looks for specific command in the paths of the environment variable.
+*/
 static char	*find_cmd_path(char *cmd, char **paths)
 {
 	int		i;
@@ -31,6 +34,9 @@ static char	*find_cmd_path(char *cmd, char **paths)
 	return (NULL);
 }
 
+/*
+Splits given command string to an array of actual command and command options. If the command contains a path, uses that instead of the environment variable. Calls execve with given path and command array and environment.
+*/
 static int	do_cmd(t_piper **piper)
 {
 	char	**cmd;
@@ -59,6 +65,9 @@ static int	do_cmd(t_piper **piper)
 	return (1);
 }
 
+/*
+Child process handles input and output redirection and calls do_cmd to actually execute execve.
+*/
 static void	child(int *fd, t_piper **piper)
 {
 	close(fd[0]);
@@ -90,7 +99,7 @@ static void	child(int *fd, t_piper **piper)
 
 /*
 Creates a pipe, forks, stores child PID to struct and duplicates STDIN file 
-descriptor to pipe's read end. Enssure's both write and read ends are closed 
+descriptor to pipe's read end. Enssure's both write and read ends are closed, 
 even if error's occur.
 */
 static void	parent(t_piper **piper)

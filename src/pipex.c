@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:29:37 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/04 12:36:34 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/04 14:00:41 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ static char	*find_cmd_path(char *cmd, char **paths)
 }
 
 /*
-Splits given command string to an array of actual command and command options. If the command contains a path, uses that instead of the environment variable. Calls execve with given path and command array and environment.
+Splits given command string to an array of actual command and command options 
+If the command contains a path, uses that instead of the environment variable 
+Calls execve with given path and command array and environment.
 */
 static int	do_cmd(t_piper **piper)
 {
@@ -66,7 +68,8 @@ static int	do_cmd(t_piper **piper)
 }
 
 /*
-Child process handles input and output redirection and calls do_cmd to actually execute execve.
+Child process handles input and output redirection and calls do_cmd to actually 
+execute execve.
 */
 static void	child(int *fd, t_piper **piper)
 {

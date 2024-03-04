@@ -6,14 +6,15 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/04 12:42:25 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/04 14:00:17 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 /*
-Handles command failures, lacking permissions, etc by printing appropriate error message, cleanin the piper struct and returning with correct exit code.
+Handles command failures, lacking permissions, etc by printing appropriate 
+error message, cleanin the piper struct and returning with correct exit code.
 */
 void	fail(int exit_code, char *msg, t_piper **piper)
 {

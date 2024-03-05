@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/04 14:08:45 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/05 09:13:07 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ Cleans the piper struct by closing any open fds and freeing allocated memory.
 */
 void	clean_piper(t_piper **piper)
 {
+	if (!(*piper))
+		return ;
 	if ((*piper)->in_fd != -1)
 		close((*piper)->in_fd);
 	if ((*piper)->out_fd != -1)
@@ -104,6 +106,8 @@ void	init_piper(t_piper **ppiper, int argc, char *argv[], char **envp)
 	t_piper	*piper;
 
 	piper = malloc(sizeof(t_piper));
+	if (!piper)
+		fail(EXIT_FAILURE, "Memory allocation error", &piper);
 	piper->infile = argv[1];
 	piper->outfile = argv[argc - 1];
 	piper->paths = NULL;

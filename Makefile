@@ -6,7 +6,7 @@
 #    By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/31 15:00:04 by jajuntti          #+#    #+#              #
-#    Updated: 2024/03/05 08:45:03 by jajuntti         ###   ########.fr        #
+#    Updated: 2024/03/05 08:47:47 by jajuntti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,12 +38,13 @@ INC = -I inc/ -I $(LIB_DIR)
 all: $(NAME)
 	
 $(NAME): $(LIB_PATH) $(OBJ_DIR) $(OBJS)
+	@rm -f obj/.b
 	$(CC) $(CFLAGS) $(OBJS) $(LIB_PATH) -o $(NAME) $(INC)
 
 bonus: $(LIB_PATH) $(OBJ_DIR) $(OBJS) $(BOBJS) obj/.b
 obj/.b:
-	touch obj/.b
-	rm -f obj/main.o
+	@touch obj/.b
+	@rm -f obj/main.o
 	$(CC) $(CFLAGS) $(BOBJS) $(LIB_PATH) -o $(NAME) $(INC)
 
 $(LIB_PATH): $(LIBFT)

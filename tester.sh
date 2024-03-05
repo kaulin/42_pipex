@@ -12,6 +12,7 @@ IN="meow/infile"
 OUT="meow/outfile"
 NOR="meow/noread"
 NOW="meow/nowrite"
+DIR="meow/directory"
 NULL=""
 
 # Declare test counter
@@ -39,6 +40,7 @@ function init() {
 	chmod 111 meow/nowrite_pipex meow/nowrite_shell
 	echo "This is meant to be overwritten" > meow/outfile1_pipex
 	echo "This is meant to be overwritten" > meow/outfile1_shell
+	mkdir meow/directory meow/directory_pipex meow/directory_shell
 	echo -e "${CYAN}Done!${NC}"
 }
 
@@ -208,6 +210,8 @@ test "Simple test, existing outfile should be overwritten"  "${IN}" "sort" "uniq
 test "Infile does not exist" "bad_cat" "sort" "ls" "${OUT}"
 test "No read permission for infile" "${NOR}" "sort" "ls" "${OUT}"
 test "No write permission for outfile" "${IN}" "sort" "ls" "${NOW}"
+test "Infile is a directory" "${DIR}" "sort" "ls" "${OUT}"
+test "Outfile is a directory" "${IN}" "sort" "ls" "${DIR}"
 # Command tests
 test "First command does not exist" "${IN}" "bad_cat" "ls" "${OUT}"
 test "Second command does not exist" "${IN}" "ls" "bad_cat" "${OUT}"

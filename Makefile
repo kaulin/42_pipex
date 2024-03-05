@@ -6,7 +6,7 @@
 #    By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/31 15:00:04 by jajuntti          #+#    #+#              #
-#    Updated: 2024/02/28 09:59:47 by jajuntti         ###   ########.fr        #
+#    Updated: 2024/03/05 08:35:17 by jajuntti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@ all: $(NAME)
 $(NAME): $(LIB_PATH) $(OBJ_DIR) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIB_PATH) -o $(NAME) $(INC)
 
-bonus: $(LIB_PATH) $(OBJ_DIR) $(BOBJS)
+bonus: $(LIB_PATH) $(OBJ_DIR) $(OBJS) $(BOBJS)
 	$(CC) $(CFLAGS) $(BOBJS) $(LIB_PATH) -o $(NAME) $(INC)
 
 $(LIB_PATH): $(LIBFT)

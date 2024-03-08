@@ -1,6 +1,14 @@
 # pipex
 XXX
 
+## ISSUES
+- if a latter fork fails, wait for previous forks before exiting
+- command is made of only delimiter characters
+- separate checks for file existing and file being executable
+- fix error handling messages to be consistent with either bash or zsh
+- file open access error, fail process if tied in or outfile fails
+- fix memory leak in ./pipex 'infile' '/bin/hello' '/bin/hello' 'outfile2' ( < infile /bin/hello | /bin/hello > outfile )
+
 ## Introduction
 This was a 42 cursus project focusing on XXX. The aim was to XXX
 
@@ -24,7 +32,7 @@ XXX
 ### Possible improvements
 
 ## Acknowledgements
-- Peer evaluators: 
+- Peer evaluators: Carlos!!!!
 
 ## Resources
 Cyrus McConnell, M C. (2017, November 8). Pipes, Forks & Dups: Understanding Command Execution and Input/Output Data Flow. Retrieved from https://www.rozmichelle.com/pipes-forks-dups/

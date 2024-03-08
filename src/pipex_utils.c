@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/05 09:13:07 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/07 13:33:03 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,30 @@
 
 /*
 Handles command failures, lacking permissions, etc by printing appropriate 
-error message, cleaning the piper struct and returning with correct exit code.
+error message, cleaning the piper struct and returning with correct exit code. Also waits for any previous children that are still running, if a fork fails 
+later in the pipeline.
 */
 void	fail(int exit_code, char *msg, t_piper **piper)
 {
+	while ((*piper) && ft_strncmp(msg, "Fork", 4) == 0 && (*piper)->cmd_i >= 0)
+	{
+		if (waitpid((*piper)->pids[(*piper)->cmd_i], NULL, 0) == -1)
+		{
+			ft_putendl_fd("Waitpid failed", 2);
+			clean_piper(piper);
+			exit(EXIT_FAILURE);
+		}
+		(*piper)->cmd_i--;
+	}
 	if (exit_code == 127 && ft_strchr(msg, '/') == NULL)
 	{
-		ft_putstr_fd("command not found: ", 2);
-		ft_putendl_fd(msg, 2);
+		ft_putstr_fd(msg, 2);
+		ft_putendl_fd(": command not found", 2);
 	}
 	else
 		perror(msg);
-	if (*piper)
-		clean_piper(piper);
-	exit (exit_code);
+	clean_piper(piper);
+	exit(exit_code);
 }
 
 /*
@@ -118,6 +128,7 @@ void	init_piper(t_piper **ppiper, int argc, char *argv[], char **envp)
 	piper->cmdc = argc - 3;
 	piper->cmdv = &(argv[2]);
 	piper->envp = envp;
+	piper->err = 0;
 	parse_paths(&piper->paths, envp);
 	if (!piper->paths)
 		fail(EXIT_FAILURE, "Missing environment paths", &piper);

@@ -6,7 +6,7 @@
 #    By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/31 15:00:04 by jajuntti          #+#    #+#              #
-#    Updated: 2024/03/05 09:00:46 by jajuntti         ###   ########.fr        #
+#    Updated: 2024/03/07 12:16:18 by jajuntti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 
 SRC_DIR = src/
 COMMON = pipex.c \
+		child.c \
 		pipex_utils.c \
 		split_quote.c
 SRC =	main.c $(COMMON)
@@ -38,13 +39,13 @@ INC = -I inc/ -I $(LIB_DIR)
 all: $(NAME)
 	
 $(NAME): $(LIB_PATH) $(OBJ_DIR) $(OBJS) obj/.m
-obj/.m:
+obj/.m: $(LIB_PATH) $(OBJ_DIR) $(OBJS)
 	@touch obj/.m
 	@rm -f obj/.b
 	$(CC) $(CFLAGS) $(OBJS) $(LIB_PATH) -o $(NAME) $(INC)
 
 bonus: $(LIB_PATH) $(OBJ_DIR) $(OBJS) $(BOBJS) obj/.b
-obj/.b:
+obj/.b: $(LIB_PATH) $(OBJ_DIR) $(OBJS) $(BOBJS)
 	@touch obj/.b
 	@rm -f obj/.m
 	$(CC) $(CFLAGS) $(BOBJS) $(LIB_PATH) -o $(NAME) $(INC)

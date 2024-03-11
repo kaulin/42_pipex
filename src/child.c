@@ -12,6 +12,12 @@
 
 #include "pipex.h"
 
+/*
+Function checks if the current command is the first or last to be executed. 
+For the first command, an input file is opened, duplicated to STDIN and then 
+closed. For the last, an output file is opened (also created with correct 
+permissions if necessary), duplicated to STDOUT and then closed. 
+*/
 static void	open_dub_close(t_piper **piper)
 {
 	if ((*piper)->cmd_i == 0)

@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:16:04 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/08 14:03:26 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/14 09:31:03 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,7 @@ static int	do_cmd(t_piper **piper)
 {
 	char	**cmd;
 	char	*cmd_path;
-	int		i;
 
-	i = 0;
 	cmd = split_quote((*piper)->cmdv[(*piper)->cmd_i], " ");
 	if (!cmd)
 		return (1);

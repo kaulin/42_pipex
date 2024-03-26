@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:16:04 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/26 15:50:15 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/26 16:02:23 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static int	do_cmd(t_piper **piper)
 	char	**cmd;
 	char	*cmd_path;
 
-	if (ft_strncmp((*piper)->cmdv[(*piper)->cmd_i], " ", 1) == 0)
+	if (ft_strchr(" \t\v\n\r\f", (*piper)->cmdv[(*piper)->cmd_i][0]))
 		return (clean_return(NULL, NULL, 127));
 	cmd = split_quote((*piper)->cmdv[(*piper)->cmd_i], " ");
 	if (!cmd)

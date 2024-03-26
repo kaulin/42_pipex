@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:29:37 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/07 12:16:53 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/26 12:28:46 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ static void	parent(t_piper **piper)
 	int		fd[2];
 
 	if (pipe(fd) == -1)
-		fail(EXIT_FAILURE, "Pipe failed", piper);
+		fail(666, "Pipe failed", piper);
 	pid = fork();
 	if (pid == -1)
 	{
 		close(fd[0]);
 		close(fd[1]);
-		fail(EXIT_FAILURE, "Fork failed", piper);
+		fail(666, "Fork failed", piper);
 	}
 	if (pid == 0)
 		child(fd, piper);
@@ -44,10 +44,70 @@ static void	parent(t_piper **piper)
 }
 
 /*
+Parses paths from environment variable.
+*/
+static void	parse_paths(char ***paths, char **envp)
+{
+	int		i;
+	char	*joined_path;
+
+	i = 0;
+	if (!*envp)
+		return ;
+	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5))
+		i++;
+	if (!envp[i] || !envp[i][5])
+		return ;
+	*paths = ft_split(&(envp[i][5]), ":");
+	if (!(*paths))
+		return ;
+	i = 0;
+	while ((*paths)[i])
+	{
+		joined_path = ft_strjoin((*paths)[i], "/");
+		if (!joined_path)
+		{
+			clean_array(*paths);
+			return ;
+		}
+		free((*paths)[i]);
+		(*paths)[i++] = joined_path;
+	}
+}
+
+/*
+Initialises piper struct.
+*/
+static void	init_piper(t_piper **ppiper, int argc, char *argv[], char **envp)
+{
+	t_piper	*piper;
+
+	piper = malloc(sizeof(t_piper));
+	if (!piper)
+		fail(EXIT_FAILURE, "Memory allocation error", &piper);
+	piper->infile = argv[1];
+	piper->outfile = argv[argc - 1];
+	piper->paths = NULL;
+	piper->pids = NULL;
+	piper->in_fd = -1;
+	piper->out_fd = -1;
+	piper->cmd_i = 0;
+	piper->cmdc = argc - 3;
+	piper->cmdv = &(argv[2]);
+	piper->envp = envp;
+	piper->cmd_err = NULL;
+	parse_paths(&piper->paths, envp);
+	piper->pids = malloc(sizeof(pid_t) * piper->cmdc);
+	if (!piper->pids)
+		fail(EXIT_FAILURE, "Memory allocation error", &piper);
+	*ppiper = piper;
+}
+
+/*
 Initialises piper struct with information from received aguments. 
 Calls parent function for each command parameter. Waits for all 
 children to exit, cleans the piper struct and exits with the last 
-childs exit status.
+child's exit status.
 */
 int	pipex(int argc, char *argv[], char **envp)
 {

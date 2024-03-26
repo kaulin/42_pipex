@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:16:04 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/26 09:19:52 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/26 11:58:45 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ static char	*find_cmd_path(char *cmd, char **paths)
 	char	*cmd_path;
 
 	i = 0;
+	if (!paths)
+		return (NULL);
 	while (paths[i])
 	{
 		cmd_path = ft_strjoin(paths[i], cmd);
@@ -83,7 +85,6 @@ static int	do_cmd(t_piper **piper)
 	char	**cmd;
 	char	*cmd_path;
 
-	dprintf(2, "command #%d = %s\n", (*piper)->cmd_i, (*piper)->cmdv[(*piper)->cmd_i]);
 	cmd = split_quote((*piper)->cmdv[(*piper)->cmd_i], " ");
 	if (!cmd)
 		return (1);
@@ -102,7 +103,7 @@ static int	do_cmd(t_piper **piper)
 	if (access(cmd_path, X_OK))
 		return (clean_return(cmd, cmd_path, 126));
 	execve(cmd_path, cmd, (*piper)->envp);
-	return (1);
+	return (clean_return(cmd, cmd_path, 126));
 }
 
 /*

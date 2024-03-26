@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/26 15:53:38 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/26 16:22:03 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,10 @@ static void	check_exit_code(int *exit_code, char *msg)
 		ft_putstr_fd(msg, 2);
 		ft_putendl_fd(": is a directory", 2);
 	}
-	else
+	else if (msg)
 		perror(msg);
+	else
+		perror(" ");
 }
 
 /*

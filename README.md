@@ -7,14 +7,6 @@ A project about pipes, forks and IO redirection.
 > [!NOTE]  
 > 42 Cursus C projects need to follow specific rules and formatting dictated by the [42 Norm](https://github.com/42School/norminette/tree/master/pdf).
 
-## ISSUES
-- if a latter fork fails, wait for previous forks before exiting
-- command is made of only delimiter characters
-- separate checks for file existing and file being executable
-- fix error handling messages to be consistent with either bash or zsh
-- file open access error, fail process if tied in or outfile fails
-- fix memory leak in ./pipex 'infile' '/bin/hello' '/bin/hello' 'outfile2' ( < infile /bin/hello | /bin/hello > outfile )
-
 ## Introduction
 This was a 42 cursus project where the aim was to replicate pipes in a shell environmnet. The mandatory part required redirecting standard input to a specific file, creating a pipe to communicate between child processes executing different commands, forking and managing said processes, and redirecting output to a specific file. Error handling needed to mimic that of the actual shell (in my case Bash).
 

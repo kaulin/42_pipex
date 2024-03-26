@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/26 14:35:38 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/26 15:53:38 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	wait_until_death(int exit_code, char *msg, t_piper **piper)
 Checks for specific exit code & message combinations to output 
 bash specific error message.
 */
-static void check_exit_code(int *exit_code, char *msg)
+static void	check_exit_code(int *exit_code, char *msg)
 {
 	if (*exit_code == 127 && ft_strncmp(msg, "", 1) == 0)
 	{

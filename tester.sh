@@ -229,6 +229,7 @@ test "Full path of command with command options" "${IN}" "/usr/bin/grep -v \"Bl\
 
 # Finish up
 echo -e "${CYAN}Done! You've completed all $((${COUNTER}-1)) tests.${NC}"
+echo -e "Test ./pipex ' ' ' ' ' ' ' ' ( < ' ' ' ' | ' ' > ' ') separately"
 clean
 
 # Test cases TODO

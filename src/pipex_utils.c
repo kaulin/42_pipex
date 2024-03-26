@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/26 13:52:46 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/26 14:35:38 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void check_exit_code(int *exit_code, char *msg)
 	{
 		ft_putendl_fd(".: filename argument required", 2);
 		ft_putendl_fd(".: usage: . filename [arguments]", 2);
-		*exit_code = 127;
+		*exit_code = 2;
 	}
 	else if (*exit_code == 126)
 	{

@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/26 16:38:09 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/26 17:03:25 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,10 @@ static void	wait_until_death(int exit_code, char *msg, t_piper **piper)
 Checks for specific exit code & message combinations to output 
 bash specific error message.
 */
-static void	check_exit_code(int *exit_code, char *msg)
+static void	check_exit_code(int *exit_code, char *msg, t_piper **piper)
 {
-	if (*exit_code == 127 && ft_strncmp(msg, "", 1) == 0)
+	if (*exit_code == 127 && ft_strncmp(msg, "", 1) == 0 \
+		&& ft_strncmp((*piper)->infile, "", 1) == 0)
 	{
 		ft_putendl_fd(": No such file or directory", 2);
 		*exit_code = 1;
@@ -46,12 +47,6 @@ static void	check_exit_code(int *exit_code, char *msg)
 	{
 		ft_putstr_fd(msg, 2);
 		ft_putendl_fd(": command not found", 2);
-	}
-	else if (*exit_code == 126 && ft_strncmp(msg, ".", 2) == 0)
-	{
-		ft_putendl_fd(".: filename argument required", 2);
-		ft_putendl_fd(".: usage: . filename [arguments]", 2);
-		*exit_code = 2;
 	}
 	else if (*exit_code == 126)
 	{
@@ -72,8 +67,14 @@ struck and exits with appropriate exit code.
 void	fail(int exit_code, char *msg, t_piper **piper)
 {
 	wait_until_death(exit_code, msg, piper);
-	ft_putstr_fd(" ", 2);
-	check_exit_code(&exit_code, msg);
+	if (exit_code == 126 && ft_strncmp(msg, ".", 2) == 0)
+	{
+		ft_putendl_fd(".: filename argument required", 2);
+		ft_putendl_fd(".: usage: . filename [arguments]", 2);
+		exit_code = 2;
+	}
+	else
+		check_exit_code(&exit_code, msg, piper);
 	clean_piper(piper);
 	exit(exit_code);
 }

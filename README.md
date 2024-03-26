@@ -4,6 +4,25 @@
 # pipex
 A project about pipes, forks and IO redirection.
 
+## TODO
+Fix this
+TEST NUMBER 20: ./pipex 'infile2' 'myfolder' 'myfolder' 'outfile2' and < infile2 myfolder | myfolder > outfile
+
+BASH:
+mandatory_bash.sh: line 207: myfolder: command not found
+mandatory_bash.sh: line 207: myfolder: command not found
+
+Content of outfile from bash:
+
+PIPEX:
+myfolder: is a directory
+myfolder: is a directory
+
+Content of outfile from pipex:
+
+
+Return value of bash: 127. Return value of pipex: 126
+
 > [!NOTE]  
 > 42 Cursus C projects need to follow specific rules and formatting dictated by the [42 Norm](https://github.com/42School/norminette/tree/master/pdf).
 

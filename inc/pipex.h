@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 14:56:21 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/08 13:48:44 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/14 09:34:25 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <fcntl.h>
 # include <stdio.h>
+# include <sys/wait.h>
 # include "libft.h"
 
 typedef struct s_piper

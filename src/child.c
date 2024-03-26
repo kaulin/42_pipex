@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:16:04 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/14 09:31:03 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/26 09:19:52 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,15 @@ static char	*find_cmd_path(char *cmd, char **paths)
 
 /*
 Splits given command string to an array of actual command and command options 
-If the command contains a path, uses that instead of the environment variable 
-Calls execve with given path and command array and environment.
+If command not found from environment paths, tries to use the command itself as 
+path. Calls execve with given path and command array and environment.
 */
 static int	do_cmd(t_piper **piper)
 {
 	char	**cmd;
 	char	*cmd_path;
 
+	dprintf(2, "command #%d = %s\n", (*piper)->cmd_i, (*piper)->cmdv[(*piper)->cmd_i]);
 	cmd = split_quote((*piper)->cmdv[(*piper)->cmd_i], " ");
 	if (!cmd)
 		return (1);
@@ -92,7 +93,8 @@ static int	do_cmd(t_piper **piper)
 	cmd_path = find_cmd_path(cmd[0], (*piper)->paths);
 	if (!cmd_path && access(cmd[0], F_OK) == 0)
 	{
-		cmd_path = cmd[0];
+		cmd_path = ft_strdup(cmd[0]);
+		free(cmd[0]);
 		cmd[0] = ft_strdup(ft_strrchr(cmd_path, '/') + 1);
 	}
 	if (!cmd_path)

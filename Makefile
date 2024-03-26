@@ -6,13 +6,13 @@
 #    By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/31 15:00:04 by jajuntti          #+#    #+#              #
-#    Updated: 2024/03/07 12:16:18 by jajuntti         ###   ########.fr        #
+#    Updated: 2024/03/26 08:42:27 by jajuntti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 CC = cc
-CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
 
 SRC_DIR = src/
 COMMON = pipex.c \

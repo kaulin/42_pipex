@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/26 12:33:29 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/26 13:02:54 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,6 @@ later in the pipeline.
 void	fail(int exit_code, char *msg, t_piper **piper)
 {
 	wait_until_death(exit_code, msg, piper);
-	if (exit_code == 127 && ft_strncmp(msg, ".", 2) == 0)
-	{
-		ft_putendl_fd(".: filename argument required", 2);
-		ft_putendl_fd(".: usage: . filename [arguments]", 2);
-	}
 	if (exit_code == 127 && ft_strchr(msg, '/') == NULL)
 	{
 		ft_putstr_fd(msg, 2);

@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/26 16:22:03 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/26 16:38:09 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static void	check_exit_code(int *exit_code, char *msg)
 	else if (msg)
 		perror(msg);
 	else
-		perror(" ");
+		perror("");
 }
 
 /*
@@ -72,6 +72,7 @@ struck and exits with appropriate exit code.
 void	fail(int exit_code, char *msg, t_piper **piper)
 {
 	wait_until_death(exit_code, msg, piper);
+	ft_putstr_fd(" ", 2);
 	check_exit_code(&exit_code, msg);
 	clean_piper(piper);
 	exit(exit_code);

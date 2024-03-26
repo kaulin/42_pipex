@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:16:04 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/26 11:58:45 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/26 13:46:15 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ static int	do_cmd(t_piper **piper)
 	char	**cmd;
 	char	*cmd_path;
 
+	if (ft_strncmp((*piper)->cmdv[(*piper)->cmd_i], " ", 1) == 0)
+		return (clean_return(NULL, NULL, 127));
 	cmd = split_quote((*piper)->cmdv[(*piper)->cmd_i], " ");
 	if (!cmd)
 		return (1);
@@ -123,5 +125,7 @@ void	child(int *fd, t_piper **piper)
 		fail(127, (*piper)->cmdv[(*piper)->cmd_i], piper);
 	open_dub_close(piper);
 	err_code = do_cmd(piper);
-	fail(err_code, (*piper)->cmd_err, piper);
+	if ((*piper)->cmd_err)
+		fail(err_code, (*piper)->cmd_err, piper);
+	fail(err_code, (*piper)->cmdv[(*piper)->cmd_i], piper);
 }

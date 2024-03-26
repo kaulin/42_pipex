@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/26 13:02:54 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/26 13:52:46 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,32 +32,45 @@ static void	wait_until_death(int exit_code, char *msg, t_piper **piper)
 }
 
 /*
-Handles command failures, lacking permissions, etc by printing appropriate 
-error message, cleaning the piper struct and returning with correct exit code. 
-Also waits for any previous children that are still running, if a fork fails 
-later in the pipeline.
+Checks for specific exit code & message combinations to output 
+bash specific error message.
 */
-void	fail(int exit_code, char *msg, t_piper **piper)
+static void check_exit_code(int *exit_code, char *msg)
 {
-	wait_until_death(exit_code, msg, piper);
-	if (exit_code == 127 && ft_strchr(msg, '/') == NULL)
+	if (*exit_code == 127 && ft_strncmp(msg, "", 1) == 0)
+	{
+		ft_putendl_fd(": No such file or directory", 2);
+		*exit_code = 1;
+	}
+	else if (*exit_code == 127 && ft_strchr(msg, '/') == NULL)
 	{
 		ft_putstr_fd(msg, 2);
 		ft_putendl_fd(": command not found", 2);
 	}
-	if (exit_code == 126 && ft_strncmp(msg, ".", 2) == 0)
+	else if (*exit_code == 126 && ft_strncmp(msg, ".", 2) == 0)
 	{
-		ft_putendl_fd(".: filename argumen required", 2);
+		ft_putendl_fd(".: filename argument required", 2);
 		ft_putendl_fd(".: usage: . filename [arguments]", 2);
-		exit_code = 127;
+		*exit_code = 127;
 	}
-	else if (exit_code == 126)
+	else if (*exit_code == 126)
 	{
 		ft_putstr_fd(msg, 2);
 		ft_putendl_fd(": is a directory", 2);
 	}
 	else
 		perror(msg);
+}
+
+/*
+Handles command failures, lacking permissions, etc. First waits for all 
+children to finish, then outputs appropriate error message, cleans piper 
+struck and exits with appropriate exit code.
+*/
+void	fail(int exit_code, char *msg, t_piper **piper)
+{
+	wait_until_death(exit_code, msg, piper);
+	check_exit_code(&exit_code, msg);
 	clean_piper(piper);
 	exit(exit_code);
 }

@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:16:04 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/26 16:02:23 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/27 08:33:01 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static int	do_cmd(t_piper **piper)
 	char	*cmd_path;
 
 	if (ft_strchr(" \t\v\n\r\f", (*piper)->cmdv[(*piper)->cmd_i][0]))
-		return (clean_return(NULL, NULL, 127));
+		return (127);
 	cmd = split_quote((*piper)->cmdv[(*piper)->cmd_i], " ");
 	if (!cmd)
 		return (1);
@@ -124,6 +124,8 @@ void	child(int *fd, t_piper **piper)
 		fail(127, (*piper)->cmdv[(*piper)->cmd_i], piper);
 	open_dub_close(piper);
 	err_code = do_cmd(piper);
+	if (err_code == 1)
+		fail(err_code, "Memory allocation error", piper);
 	if ((*piper)->cmd_err)
 		fail(err_code, (*piper)->cmd_err, piper);
 	fail(err_code, (*piper)->cmdv[(*piper)->cmd_i], piper);

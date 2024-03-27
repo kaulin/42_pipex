@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:29:37 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/26 12:28:46 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/27 08:52:58 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,13 @@ static void	parent(t_piper **piper)
 	}
 	if (pid == 0)
 		child(fd, piper);
-	close(fd[1]);
 	(*piper)->pids[(*piper)->cmd_i] = pid;
+	(*piper)->cmd_i++;
+	close(fd[1]);
 	if (dup2(fd[0], STDIN_FILENO) == -1)
 	{
 		close(fd[0]);
-		fail(EXIT_FAILURE, "", piper);
+		fail(666, "Dup2 failed", piper);
 	}
 	close(fd[0]);
 }
@@ -97,7 +98,7 @@ static void	init_piper(t_piper **ppiper, int argc, char *argv[], char **envp)
 	piper->envp = envp;
 	piper->cmd_err = NULL;
 	parse_paths(&piper->paths, envp);
-	piper->pids = malloc(sizeof(pid_t) * piper->cmdc);
+	piper->pids = ft_calloc(piper->cmdc, sizeof(pid_t));
 	if (!piper->pids)
 		fail(EXIT_FAILURE, "Memory allocation error", &piper);
 	*ppiper = piper;
@@ -120,10 +121,7 @@ int	pipex(int argc, char *argv[], char **envp)
 	status = 0;
 	init_piper(&piper, argc, argv, envp);
 	while (piper->cmd_i < piper->cmdc)
-	{
 		parent(&piper);
-		piper->cmd_i++;
-	}
 	while (i < piper->cmdc)
 	{
 		exit_status = 0;

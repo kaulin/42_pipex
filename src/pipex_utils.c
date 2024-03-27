@@ -6,28 +6,31 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/26 17:03:25 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/27 08:56:40 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 /*
-Function waits for any previous children that are still running, if a fork 
-fails later in the pipeline.
+Function waits for any previous children that are still running, if the parent 
+fails after the first fork.
 */
-static void	wait_until_death(int exit_code, char *msg, t_piper **piper)
+static void	reap_the_children(int exit_code, t_piper **piper)
 {
-	while ((*piper) && exit_code == 666 && msg \
-		&& ft_strncmp(msg, "Fork", 4) == 0 && (*piper)->cmd_i >= 0)
+	if ((*piper) && exit_code == 666)
 	{
-		if (waitpid((*piper)->pids[(*piper)->cmd_i], NULL, 0) == -1)
+		while ((*piper)->cmd_i >= 0)
 		{
-			ft_putendl_fd("Waitpid failed", 2);
-			clean_piper(piper);
-			exit(EXIT_FAILURE);
+			if (waitpid((*piper)->pids[(*piper)->cmd_i], NULL, 0) == -1)
+			{
+				ft_putendl_fd("Waitpid failed", 2);
+				clean_piper(piper);
+				exit(EXIT_FAILURE);
+			}
+			(*piper)->cmd_i--;
 		}
-		(*piper)->cmd_i--;
+		exit_code = 1;
 	}
 }
 
@@ -66,7 +69,7 @@ struck and exits with appropriate exit code.
 */
 void	fail(int exit_code, char *msg, t_piper **piper)
 {
-	wait_until_death(exit_code, msg, piper);
+	reap_the_children(exit_code, piper);
 	if (exit_code == 126 && ft_strncmp(msg, ".", 2) == 0)
 	{
 		ft_putendl_fd(".: filename argument required", 2);

@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:29:37 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/27 14:05:32 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/27 14:29:31 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,66 +40,6 @@ static void	parent(t_piper **piper)
 		fail(666, "Dup2 failed", piper);
 	}
 	close(fd[0]);
-}
-
-/*
-Parses paths from environment variable.
-*/
-static void	parse_paths(char ***paths, char **envp)
-{
-	int		i;
-	char	*joined_path;
-
-	i = 0;
-	if (!*envp)
-		return ;
-	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5))
-		i++;
-	if (!envp[i] || !envp[i][5])
-		return ;
-	*paths = ft_split(&(envp[i][5]), ":");
-	if (!(*paths))
-		return ;
-	i = 0;
-	while ((*paths)[i])
-	{
-		joined_path = ft_strjoin((*paths)[i], "/");
-		if (!joined_path)
-		{
-			clean_array(*paths);
-			return ;
-		}
-		free((*paths)[i]);
-		(*paths)[i++] = joined_path;
-	}
-}
-
-/*
-Initialises piper struct.
-*/
-static void	init_piper(t_piper **ppiper, int argc, char *argv[], char **envp)
-{
-	t_piper	*piper;
-
-	piper = malloc(sizeof(t_piper));
-	if (!piper)
-		fail(EXIT_FAILURE, "Memory allocation error", &piper);
-	piper->infile = argv[1];
-	piper->outfile = argv[argc - 1];
-	piper->paths = NULL;
-	piper->pids = NULL;
-	piper->in_fd = -1;
-	piper->out_fd = -1;
-	piper->cmd_i = 0;
-	piper->cmdc = argc - 3;
-	piper->cmdv = &(argv[2]);
-	piper->envp = envp;
-	piper->cmd_err = NULL;
-	parse_paths(&piper->paths, envp);
-	piper->pids = ft_calloc(piper->cmdc, sizeof(pid_t));
-	if (!piper->pids)
-		fail(EXIT_FAILURE, "Memory allocation error", &piper);
-	*ppiper = piper;
 }
 
 /*

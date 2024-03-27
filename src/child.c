@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:16:04 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/27 10:33:43 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/27 14:31:02 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,6 @@ static void	open_dub_close(t_piper **piper)
 	}
 }
 
-/*
-Frees an array of srings and a string given as arguments and returns the given 
-integer value.
-*/
-static int	clean_return(char **arr, char *str, int ret)
-{
-	if (arr)
-		clean_array(arr);
-	if (str)
-		free(str);
-	return (ret);
-}
 
 /*
 Looks for specific command in the paths of the environment variable.

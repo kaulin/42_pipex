@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:16:04 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/27 08:33:01 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/27 10:33:43 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void	child(int *fd, t_piper **piper)
 	close(fd[0]);
 	if ((*piper)->cmd_i < (*piper)->cmdc - 1 \
 		&& dup2(fd[1], STDOUT_FILENO) == -1)
-		fail(EXIT_FAILURE, "dup2 failure", piper);
+		fail(EXIT_FAILURE, "Dup2 failed", piper);
 	close(fd[1]);
 	if (*((*piper)->cmdv[(*piper)->cmd_i]) == 0)
 		fail(127, (*piper)->cmdv[(*piper)->cmd_i], piper);

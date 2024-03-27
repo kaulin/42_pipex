@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:29:37 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/27 08:52:58 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/27 14:05:32 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,19 @@ even if error's occur.
 */
 static void	parent(t_piper **piper)
 {
-	pid_t	pid;
 	int		fd[2];
 
 	if (pipe(fd) == -1)
 		fail(666, "Pipe failed", piper);
-	pid = fork();
-	if (pid == -1)
+	(*piper)->pids[(*piper)->cmd_i] = fork();
+	if ((*piper)->pids[(*piper)->cmd_i] == -1)
 	{
 		close(fd[0]);
 		close(fd[1]);
 		fail(666, "Fork failed", piper);
 	}
-	if (pid == 0)
+	if ((*piper)->pids[(*piper)->cmd_i] == 0)
 		child(fd, piper);
-	(*piper)->pids[(*piper)->cmd_i] = pid;
 	(*piper)->cmd_i++;
 	close(fd[1]);
 	if (dup2(fd[0], STDIN_FILENO) == -1)

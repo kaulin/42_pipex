@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:16:04 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/27 14:31:02 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/28 10:50:41 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ static int	do_cmd(t_piper **piper)
 	}
 	if (!cmd_path)
 		return (clean_return(cmd, NULL, 127));
+	if (is_directory(cmd_path))
+		return (clean_return(cmd, cmd_path, 321));
 	execve(cmd_path, cmd, (*piper)->envp);
 	return (clean_return(cmd, cmd_path, 126));
 }

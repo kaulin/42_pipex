@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 14:32:34 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/27 14:33:11 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/28 10:49:44 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,13 @@ static void	check_exit_code(int *exit_code, char *msg, t_piper **piper)
 	}
 	else if (*exit_code == 127 && ft_strchr(msg, '/') == NULL)
 	{
-		msg = ft_strjoin(msg, ": command not found\n");
-		if (!msg)
+		if (join_print_free(msg, ": command not found\n", 2))
 			ft_putstr_fd("Memory allocation error\n", 2);
-		else
-			ft_putstr_fd(msg, 2);
 	}
-	else if (*exit_code == 126)
+	else if (*exit_code == 321)
 	{
-		ft_putstr_fd(msg, 2);
-		ft_putstr_fd(": is a directory\n", 2);
+		if (join_print_free(msg, ": is a directory\n", 2))
+			ft_putstr_fd("Memory allocation error\n", 2);
 	}
 	else if (msg)
 		perror(msg);
@@ -76,8 +73,9 @@ void	fail(int exit_code, char *msg, t_piper **piper)
 	reap_the_children(exit_code, piper);
 	if (exit_code == 126 && ft_strncmp(msg, ".", 2) == 0)
 	{
-		ft_putstr_fd(".: filename argument required\n\
-		.: usage: . filename [arguments]\n", 2);
+		ft_putstr_fd( \
+		".: filename argument required\n.: usage: . filename [arguments]\n",\
+		2);
 		exit_code = 2;
 	}
 	else

@@ -6,11 +6,40 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/27 14:33:00 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/28 10:48:50 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+/*
+Returns 1 if given path is a directory and 0 if it's not.
+*/
+int	is_directory(char *filepath)
+{
+	int	fd;
+
+	fd = open(filepath, O_DIRECTORY);
+	if (fd != -1)
+	{
+		close(fd);
+		return (1);
+	}
+	return (0);
+}
+
+int	join_print_free(char *str1, char *str2, int fd)
+{
+	char	*str;
+
+	str = ft_strjoin(str1, str2);
+	if (!str)
+		return (1);
+	ft_putstr_fd(str, fd);
+	free(str);
+	return (0);
+}
+
 
 /*
 Free's the elements of an array of strings and then the array pointer itself.

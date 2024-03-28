@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:16:04 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/28 10:50:41 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/28 11:22:48 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ static void	open_dub_close(t_piper **piper)
 		close((*piper)->out_fd);
 	}
 }
-
 
 /*
 Looks for specific command in the paths of the environment variable.

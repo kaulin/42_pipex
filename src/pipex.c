@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:29:37 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/27 14:29:31 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/28 11:26:15 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 /*
 Creates a pipe, forks, stores child PID to struct and duplicates STDIN file 
-descriptor to pipe's read end. Enssure's both write and read ends are closed, 
-even if error's occur.
+descriptor to pipe's read end. Ensure's both write and read ends are closed, 
+even if errors occur.
 */
 static void	parent(t_piper **piper)
 {

@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/28 10:48:50 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/28 11:25:58 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@ int	is_directory(char *filepath)
 	return (0);
 }
 
+/*
+Joins the two sttrings given as parameters, prints joined string to given fd 
+and frees the joined string. If mallocing of joined string fails, returns 1.
+*/
 int	join_print_free(char *str1, char *str2, int fd)
 {
 	char	*str;
@@ -39,7 +43,6 @@ int	join_print_free(char *str1, char *str2, int fd)
 	free(str);
 	return (0);
 }
-
 
 /*
 Free's the elements of an array of strings and then the array pointer itself.

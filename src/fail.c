@@ -6,12 +6,11 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 14:32:34 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/28 10:49:44 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/28 11:23:59 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
 
 /*
 Function waits for any previous children that are still running, if the parent 
@@ -73,8 +72,8 @@ void	fail(int exit_code, char *msg, t_piper **piper)
 	reap_the_children(exit_code, piper);
 	if (exit_code == 126 && ft_strncmp(msg, ".", 2) == 0)
 	{
-		ft_putstr_fd( \
-		".: filename argument required\n.: usage: . filename [arguments]\n",\
+		ft_putstr_fd(\
+		".: filename argument required\n.: usage: . filename [arguments]\n", \
 		2);
 		exit_code = 2;
 	}

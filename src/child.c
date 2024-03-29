@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:16:04 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/28 11:22:48 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/29 09:44:06 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static char	*find_cmd_path(char *cmd, char **paths)
 		cmd_path = ft_strjoin(paths[i], cmd);
 		if (!cmd_path)
 			return (NULL);
-		if (access(cmd_path, F_OK) == 0)
+		if (access(cmd_path, F_OK) == 0 && is_directory(cmd_path) == 0)
 			return (cmd_path);
 		free(cmd_path);
 		i++;
@@ -90,7 +90,7 @@ static int	do_cmd(t_piper **piper)
 	}
 	if (!cmd_path)
 		return (clean_return(cmd, NULL, 127));
-	if (is_directory(cmd_path))
+	if (ft_strncmp(cmd[0], ".", 2) && is_directory(cmd_path))
 		return (clean_return(cmd, cmd_path, 321));
 	execve(cmd_path, cmd, (*piper)->envp);
 	return (clean_return(cmd, cmd_path, 126));

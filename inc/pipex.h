@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 14:56:21 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/28 10:50:05 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/29 13:24:04 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,15 @@ typedef struct s_piper
 	char	**paths;
 	char	**envp;
 	char	*cmd_err;
+	int		heredoc;
 }	t_piper;
 
 int		pipex(int argc, char *argv[], char **envp);
 void	init_piper(t_piper **ppiper, int argc, char *argv[], char **envp);
 void	clean_piper(t_piper **piper);
-void	child(int *fd, t_piper **piper);
+void	parent(t_piper **piper);
 void	fail(int exit_code, char *msg, t_piper **piper);
+void	open_dub_close(t_piper **piper);
 int		is_directory(char *filepath);
 void	clean_array(char **array);
 int		clean_return(char **arr, char *str, int ret);

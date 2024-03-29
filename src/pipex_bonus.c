@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:29:37 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/29 13:17:45 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/29 13:21:57 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ environment variable.
 int	main(int argc, char *argv[], char **envp)
 {
 	
-	if (argc != 5)
+	if (argc < 5)
 	{
 		ft_putstr_fd("Usage: <input file> <cmd 1> <cmd 2> <output file>\n", 2);
 		exit(1);

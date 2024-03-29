@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 14:32:34 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/29 10:09:40 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/29 10:17:20 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static void	check_exit_code(int *exit_code, char *msg, t_piper **piper)
 	{
 		if (join_print_free(msg, ": Is a directory\n", 2))
 			ft_putstr_fd("Memory allocation error\n", 2);
+		*exit_code = 126;
 	}
 	else if (msg && ft_strncmp(msg, "", 1))
 		perror(msg);

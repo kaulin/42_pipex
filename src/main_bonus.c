@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 14:55:20 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/04 12:23:02 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/29 10:05:01 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ Prints use message and exits.
 static void	use_msg(void)
 {
 	ft_putstr_fd("Usage: <input file> <cmd 1> ... <cmd n> <output file>\n", 1);
-	exit(EXIT_FAILURE);
+	exit(1);
 }
 
 /*

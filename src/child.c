@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:16:04 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/29 09:44:06 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/29 10:04:28 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	open_dub_close(t_piper **piper)
 	{
 		(*piper)->in_fd = open((*piper)->infile, O_RDONLY);
 		if ((*piper)->in_fd == -1 || dup2((*piper)->in_fd, STDIN_FILENO) == -1)
-			fail(EXIT_FAILURE, (*piper)->infile, piper);
+			fail(1, (*piper)->infile, piper);
 		close((*piper)->in_fd);
 	}
 	if ((*piper)->cmd_i == (*piper)->cmdc - 1)
@@ -33,7 +33,7 @@ static void	open_dub_close(t_piper **piper)
 			open((*piper)->outfile, O_TRUNC | O_CREAT | O_RDWR, 0644);
 		if ((*piper)->out_fd == -1 \
 			|| dup2((*piper)->out_fd, STDOUT_FILENO) == -1)
-			fail(EXIT_FAILURE, (*piper)->outfile, piper);
+			fail(1, (*piper)->outfile, piper);
 		close((*piper)->out_fd);
 	}
 }
@@ -107,7 +107,7 @@ void	child(int *fd, t_piper **piper)
 	close(fd[0]);
 	if ((*piper)->cmd_i < (*piper)->cmdc - 1 \
 		&& dup2(fd[1], STDOUT_FILENO) == -1)
-		fail(EXIT_FAILURE, "Dup2 failed", piper);
+		fail(1, "Dup2 failed", piper);
 	close(fd[1]);
 	if (*((*piper)->cmdv[(*piper)->cmd_i]) == 0)
 		fail(127, (*piper)->cmdv[(*piper)->cmd_i], piper);

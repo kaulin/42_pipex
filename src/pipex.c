@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:29:37 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/28 11:26:15 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/29 10:05:35 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	pipex(int argc, char *argv[], char **envp)
 	{
 		exit_status = 0;
 		if (waitpid(piper->pids[i], &status, 0) == -1)
-			fail(EXIT_FAILURE, "Waitpid failed", &piper);
+			fail(1, "Waitpid failed", &piper);
 		if (WIFEXITED(status))
 			exit_status = WEXITSTATUS(status);
 		i++;

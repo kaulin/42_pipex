@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 14:32:34 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/29 09:34:51 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/29 10:09:40 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,14 @@ static void	check_exit_code(int *exit_code, char *msg, t_piper **piper)
 	if (*exit_code == 127 && ft_strncmp(msg, "", 1) == 0 \
 		&& ft_strncmp((*piper)->infile, "", 1) == 0)
 	{
-		ft_putstr_fd(": No such file or directory\n", 2);
+		ft_putstr_fd(" : No such file or directory\n", 2);
 		*exit_code = 1;
 	}
 	else if (*exit_code == 127 && ft_strchr(msg, '/') == NULL)
 	{
-		if (join_print_free(msg, ": command not found\n", 2))
+		if (ft_strncmp(msg, "", 1) == 0)
+			ft_putstr_fd(" : command not found\n", 2);
+		else if (join_print_free(msg, ": command not found\n", 2))
 			ft_putstr_fd("Memory allocation error\n", 2);
 	}
 	else if (*exit_code == 321)
@@ -56,13 +58,10 @@ static void	check_exit_code(int *exit_code, char *msg, t_piper **piper)
 		if (join_print_free(msg, ": Is a directory\n", 2))
 			ft_putstr_fd("Memory allocation error\n", 2);
 	}
-	else if (msg)
+	else if (msg && ft_strncmp(msg, "", 1))
 		perror(msg);
 	else
-	{
-		ft_putstr_fd(": ", 2);
-		perror("");
-	}
+		perror(" ");
 }
 
 /*

@@ -6,7 +6,7 @@
 #    By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/31 15:00:04 by jajuntti          #+#    #+#              #
-#    Updated: 2024/03/29 13:27:57 by jajuntti         ###   ########.fr        #
+#    Updated: 2024/04/02 13:25:15 by jajuntti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,17 +15,16 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 
 SRC_DIR = src/
-COMMON = process.c \
+COMMON = cmd.c \
 		fail.c \
-		split_quote.c
+		split_quote.c \
+		utils.c
 SRC =	pipex.c \
 		piper.c \
-		utils.c \
 		$(COMMON)
 SRCS = $(addprefix $(SRC_DIR), $(SRC))
 BSRC =	pipex_bonus.c \
 		piper_bonus.c \
-		utils_bonus.c \
 		$(COMMON)
 BSRCS = $(addprefix $(SRC_DIR), $(BSRC))
 

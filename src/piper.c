@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 14:28:51 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/29 13:11:43 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/03/29 14:20:42 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ void	init_piper(t_piper **ppiper, int argc, char *argv[], char **envp)
 	piper = malloc(sizeof(t_piper));
 	if (!piper)
 		fail(1, "Memory allocation error", &piper);
-	piper->heredoc = 0;
 	piper->infile = argv[1];
 	piper->outfile = argv[argc - 1];
 	piper->paths = NULL;

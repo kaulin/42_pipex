@@ -6,41 +6,11 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 14:46:31 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/29 13:23:27 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:08:44 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-/*
-Function checks if the current command is the first or last to be executed. 
-For the first command, an input file is opened, duplicated to STDIN and then 
-closed. For the last, an output file is opened (also created with correct 
-permissions if necessary), duplicated to STDOUT and then closed. 
-*/
-void	open_dub_close(t_piper **piper)
-{
-	if ((*piper)->cmd_i == 0)
-	{
-		(*piper)->in_fd = open((*piper)->infile, O_RDONLY);
-		if ((*piper)->in_fd == -1 || dup2((*piper)->in_fd, STDIN_FILENO) == -1)
-			fail(1, (*piper)->infile, piper);
-		close((*piper)->in_fd);
-	}
-	if ((*piper)->cmd_i == (*piper)->cmdc - 1)
-	{
-		if ((*piper)->heredoc)
-			(*piper)->out_fd = \
-				open((*piper)->outfile, O_APPEND | O_CREAT | O_RDWR, 0644);
-		else
-			(*piper)->out_fd = \
-				open((*piper)->outfile, O_TRUNC | O_CREAT | O_RDWR, 0644);
-		if ((*piper)->out_fd == -1 \
-			|| dup2((*piper)->out_fd, STDOUT_FILENO) == -1)
-			fail(1, (*piper)->outfile, piper);
-		close((*piper)->out_fd);
-	}
-}
 
 /*
 Returns 1 if given path is a directory and 0 if it's not.

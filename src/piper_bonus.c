@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 14:28:51 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/04/02 15:57:43 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/04/03 12:04:59 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,17 +64,24 @@ static void	parse_paths(char ***paths, char **envp)
 	}
 }
 
-static void	init_here_doc(t_piper **piper, char *delim)
+/*
+Lets the user insert lines of input, until a line that contains only the 
+delimiter string. A forced EoF is caught and an error is printed to STDERROR. 
+Each line given is printed to the write end of the given pipe.
+*/
+static void	get_input(t_piper **piper, char *delim, int *fd)
 {
-	int		fd[2];
 	char	*input;
 
-	if (pipe(fd) == -1)
-		fail(666, "Pipe failed", piper);
 	while ("true")
 	{
-		ft_putstr_fd("heredoc> ", STDOUT_FILENO);
 		input = ft_get_next_line(STDIN_FILENO);
+		if (!input)
+		{
+			ft_putstr_fd("warning: here-document delimited by end-of-file\n", \
+						2);
+			break ;
+		}
 		if (ft_strncmp(input, delim, ft_strlen(delim)) == 0 && \
 			(input[ft_strlen(delim)] == '\n' || input[ft_strlen(delim)] == 0))
 		{
@@ -88,16 +95,24 @@ static void	init_here_doc(t_piper **piper, char *delim)
 	(*piper)->in_fd = fd[0];
 }
 
+/*
+Initialises parts of the piper structs based on whether here_doc is in effect 
+or not.
+*/
 static void	init_files_and_commands(t_piper **piper, int argc, char *argv[])
 {
+	int		fd[2];
+
 	(*piper)->outfile = argv[argc - 1];
 	if (ft_strncmp(argv[1], "here_doc", 9) == 0)
 	{
+		if (pipe(fd) == -1)
+			fail(666, "Pipe failed", piper);
 		(*piper)->here_doc = 1;
 		(*piper)->infile = NULL;
 		(*piper)->cmdc = argc - 4;
 		(*piper)->cmdv = &(argv[3]);
-		init_here_doc(piper, argv[2]);
+		get_input(piper, argv[2], fd);
 	}
 	else
 	{

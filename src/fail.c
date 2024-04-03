@@ -6,7 +6,7 @@
 /*   By: jajuntti <jajuntti@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 14:32:34 by jajuntti          #+#    #+#             */
-/*   Updated: 2024/03/29 10:17:20 by jajuntti         ###   ########.fr       */
+/*   Updated: 2024/04/03 12:19:55 by jajuntti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ struck and exits with appropriate exit code.
 void	fail(int exit_code, char *msg, t_piper **piper)
 {
 	reap_the_children(exit_code, piper);
-	if (exit_code == 126 && ft_strncmp(msg, ".", 2) == 0)
+	if (exit_code == 127 && ft_strncmp(msg, ".", 2) == 0)
 	{
 		ft_putstr_fd(\
 		".: filename argument required\n.: usage: . filename [arguments]\n", \
